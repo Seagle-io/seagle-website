@@ -62,6 +62,11 @@ export default function GoldenPhyllotaxis(){
       }
       n += addCount
       while (points.length > maxPoints) points.shift()
+      if (n >= maxPoints){
+        n = 0
+        points.length = 0
+        ctx.clearRect(0,0,width,height)
+      }
     }
 
     function drawFrame(){
