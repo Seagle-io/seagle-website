@@ -52,7 +52,6 @@ export default function Navbar() {
           <a href="#product">{t('navbar.product')}</a>
           <a href="#contact">{t('navbar.demo')}</a>
           <a href="#about">{t('navbar.about')}</a>
-          <a href="#pricing">{t('navbar.pricing')}</a>
           <a href="#contact">{t('navbar.contact')}</a>
           <button className="lang-switch" onClick={(e)=>{ e.stopPropagation(); setLang(lang==='fr'?'en':'fr') }}>{t('navbar.lang')}</button>
           <a href="#contact" className="cta-small">{t('navbar.try')}</a>
