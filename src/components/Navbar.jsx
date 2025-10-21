@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Logo from './Logo.jsx'
 import { useI18n } from '../i18n.jsx'
 
 export default function Navbar() {
@@ -40,7 +39,10 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="nav-inner">
-        <a href="#top" className="brand" aria-label="Seagle AI - Accueil"><Logo /></a>
+        <a href="#top" className="brand" aria-label="Seagle AI - Accueil">
+          <img src="/branding/seagle-logo.png" alt="Seagle" className="brand-logo" />
+          <strong>SEAGLE</strong>
+        </a>
         <button ref={buttonRef} className="burger" aria-label="Menu" aria-expanded={open} aria-controls={menuId} onClick={() => setOpen(v => !v)}>
           <span />
           <span />
