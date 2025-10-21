@@ -77,7 +77,7 @@ export default function NeuralTree({ density = 'medium' }){
     const growing = [] // {slot, ax,ay,az, bx,by,bz, t, depth, dirx,diry,dirz, len}
     const slotGrowing = new Uint8Array(CFG.edgesCap) // 1 while growing
     const edgeStore = new Array(CFG.edgesCap) // {ax,ay,az,bx,by,bz,t0}
-    
+    const pending = [] // queued segments to ensure single-branch growth
 
     // Seed with a root and initial trunk segment
     const root = new THREE.Vector3(-0.6, -0.8, 0)
@@ -145,7 +145,7 @@ export default function NeuralTree({ density = 'medium' }){
       // trunk continuation
       if (Math.random() < CFG.trunkBias){
         const trunkDir = dir.clone().add(new THREE.Vector3(0, 0.25, 0)).normalize()
-        enqueueSegment(a, trunkDir, nextLen, seg.depth - 1)
+        pending.unshift({ ax:a.x, ay:a.y, az:a.z, dirx:trunkDir.x, diry:trunkDir.y, dirz:trunkDir.z, len: nextLen, depth: seg.depth - 1, priority: 'trunk' })
       }
       // limited side branches to keep tree-like look
       let sideCount = Math.random() < CFG.sideProb ? 2 : 1
@@ -160,7 +160,7 @@ export default function NeuralTree({ density = 'medium' }){
           .applyAxisAngle(axis1, rot)
           .applyAxisAngle(axis2, Math.sin(yaw)*0.2)
           .normalize()
-        enqueueSegment(a, sideDir, nextLen * (0.9 + Math.random()*0.2), seg.depth - 1)
+        pending.push({ ax:a.x, ay:a.y, az:a.z, dirx:sideDir.x, diry:sideDir.y, dirz:sideDir.z, len: nextLen * (0.9 + Math.random()*0.2), depth: seg.depth - 1, priority: 'side' })
       }
     }
 
@@ -171,9 +171,10 @@ export default function NeuralTree({ density = 'medium' }){
       camera.aspect = w / h
       camera.updateProjectionMatrix()
     }
-    // Kick off initial trunk
+    // Kick off initial trunk (queued so only one grows at a time)
     const initialDir = randomDir(root)
-    enqueueSegment(root, initialDir, THREE.MathUtils.lerp(CFG.lenMin, CFG.lenMax, 0.8), CFG.maxDepth)
+    const initLen = THREE.MathUtils.lerp(CFG.lenMin, CFG.lenMax, 0.8)
+    pending.push({ ax: root.x, ay: root.y, az: root.z, dirx: initialDir.x, diry: initialDir.y, dirz: initialDir.z, len: initLen, depth: CFG.maxDepth, priority: 'trunk' })
     fit()
 
     let last = performance.now()
@@ -185,6 +186,13 @@ export default function NeuralTree({ density = 'medium' }){
       last = now
 
       if (!reduced){
+        // Start next queued segment if none is growing
+        if (growing.length === 0 && pending.length > 0){
+          const d = pending.shift()
+          const aVec = new THREE.Vector3(d.ax, d.ay, d.az)
+          const dir = new THREE.Vector3(d.dirx, d.diry, d.dirz)
+          enqueueSegment(aVec, dir, d.len, d.depth)
+        }
         // advance growth
         for (let i=growing.length-1; i>=0; i--){
           const g = growing[i]
