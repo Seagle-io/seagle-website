@@ -38,17 +38,19 @@ export default function OrigamiKnot(){
     const color = new THREE.Color('#22D1DC')
     const meshMat = new THREE.MeshStandardMaterial({ color, transparent:true, opacity:0.12, metalness:0.25, roughness:0.75, side: THREE.DoubleSide })
     const mesh = new THREE.Mesh(geom, meshMat)
+    mesh.scale.setScalar(0.88)
     scene.add(mesh)
 
     // Edge lines overlay
     const edges = new THREE.EdgesGeometry(geom)
     const lineMat = new THREE.LineBasicMaterial({ color, transparent:true, opacity:0.9, blending: THREE.AdditiveBlending })
     const lines = new THREE.LineSegments(edges, lineMat)
+    lines.scale.setScalar(0.88)
     scene.add(lines)
 
     function fit(){
       const w = canvas.clientWidth || 480
-      const h = canvas.clientHeight || 260
+      const h = canvas.clientHeight || 300
       renderer.setSize(w, h, false)
       camera.aspect = w / h
       camera.updateProjectionMatrix()
@@ -100,4 +102,3 @@ export default function OrigamiKnot(){
     </div>
   )
 }
-

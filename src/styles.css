@@ -43,14 +43,14 @@ section{ scroll-margin-top: 80px }
 body.no-scroll{ overflow:hidden }
 
 /* HERO */
-.hero{ position:relative; z-index:1; padding: 60px 20px 20px }
+.hero{ position:relative; z-index:1; padding: 60px 20px 60px }
 .hero-inner{ max-width:1100px; margin:0 auto; text-align:center; position:relative; z-index:2 }
 .hero h1{ margin: 12px 0 6px; font-size: clamp(28px, 6vw, 46px) }
 .hero p{ color:var(--muted); margin: 8px auto 18px; max-width:760px }
 .hero-cta{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap }
 .eagle-overlay{ position:absolute; inset:0; pointer-events:none; z-index:1; display:flex; justify-content:flex-end; align-items:center; }
-.eagle-canvas{ width: clamp(280px, 40vw, 520px); height: clamp(160px, 28vw, 320px); margin-right: clamp(8px, 6vw, 60px); opacity:0.9; filter: drop-shadow(0 10px 30px rgba(34,209,220,0.15)) }
-@media (max-width: 720px){ .eagle-canvas{ width: 70vw; height: 40vw; margin-right: 0; opacity:.6 } }
+.eagle-canvas{ width: clamp(300px, 42vw, 560px); height: clamp(200px, 34vw, 400px); margin-right: clamp(8px, 6vw, 60px); opacity:0.9; filter: drop-shadow(0 10px 30px rgba(34,209,220,0.15)) }
+@media (max-width: 720px){ .eagle-canvas{ width: 74vw; height: 48vw; margin-right: 0; opacity:.6 } }
 .btn{ text-decoration:none; padding:12px 16px; border-radius:10px; font-weight:700; display:inline-block }
 .btn.primary{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#05202A }
 .btn.ghost{ border:1px solid var(--border); background:#0b1228; color:var(--text) }
