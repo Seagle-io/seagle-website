@@ -6,7 +6,7 @@ export default function Hero() {
   const { t } = useI18n()
   return (
     <section id="hero" className="hero" aria-label="Présentation">
-      <NeuralTree />
+      <NeuralTree density="medium" />
       <div className="hero-inner">
         <h1>{t('hero.title')}</h1>
         <p>{t('hero.subtitle')}</p>
