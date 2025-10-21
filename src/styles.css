@@ -9,7 +9,8 @@ html{ scroll-behavior:smooth }
 
 .animated-bg{ position:absolute; inset:0; z-index:0; pointer-events:none }
 .flow-bg{ position:fixed; inset:0; z-index:-1; pointer-events:none }
-.flow-canvas{ width:100vw; height:100vh; display:block }
+.flow-canvas{ width:100vw; height:100vh; display:block; filter: blur(8px) opacity(0.65) }
+@media (max-width: 720px){ .flow-canvas{ filter: blur(6px) opacity(0.6) } }
 .aurora-bg{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden }
 .aurora-bg .blob{ position:absolute; width:60vmax; height:60vmax; border-radius:50%; filter: blur(60px); opacity:0.5; mix-blend-mode:screen }
 .aurora-bg .b1{ left:-10vmax; top:-10vmax; background: radial-gradient(closest-side, rgba(34,209,220,0.35), rgba(34,209,220,0) 70%); animation: auroraMove1 42s linear infinite }
@@ -64,7 +65,7 @@ body.no-scroll{ overflow:hidden }
 .lead{ color:var(--muted); margin:0 0 14px }
 .features{ display:grid; grid-template-columns: 1fr; gap:14px }
 @media (min-width: 900px){ .features{ grid-template-columns: repeat(3, 1fr) } }
-.card{ background: linear-gradient(180deg, rgba(122,162,255,.06), rgba(97,210,164,.06)); border:1px solid var(--border); border-radius:12px; padding:16px; box-shadow: 0 10px 30px rgba(0,0,0,.25) }
+.card{ background: rgba(11,27,43,0.58); border:1px solid rgba(32,49,73,0.7); border-radius:12px; padding:16px; box-shadow: 0 10px 30px rgba(0,0,0,.35); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px) }
 .card h3{ margin: 4px 0 6px; font-size:18px }
 .card p{ margin:0; color:var(--muted) }
 
@@ -75,7 +76,7 @@ body.no-scroll{ overflow:hidden }
 
 .moai{ display:grid; grid-template-columns: 1fr; gap:16px }
 @media (min-width: 980px){ .moai{ grid-template-columns: 1fr 1fr } }
-.panel{ background: linear-gradient(180deg, rgba(122,162,255,.06), rgba(97,210,164,.06)); border:1px solid var(--border); border-radius: 12px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.25) }
+.panel{ background: rgba(11,27,43,0.58); border:1px solid rgba(32,49,73,0.7); border-radius: 12px; padding: 16px; box-shadow: 0 10px 30px rgba(0,0,0,.35); -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px) }
 .panel h2{ margin:0 0 10px 0; font-size:18px }
 .hint{ color: var(--muted); margin: 0 0 8px 0 }
 textarea.prompt, textarea.code{ width:100%; min-height:140px; background:#0b1228; color:var(--text); border:1px solid var(--border); border-radius:8px; padding:12px; outline:none; resize:vertical }
@@ -107,6 +108,6 @@ details.details{ margin-top:8px }
 .pricing-inner{ max-width:1100px; margin:0 auto }
 .plans{ display:grid; gap:14px; grid-template-columns: 1fr }
 @media (min-width: 900px){ .plans{ grid-template-columns: repeat(3, 1fr) } }
-.plan{ background:#0b1228; border:1px solid var(--border); border-radius:12px; padding:18px; text-align:center }
+.plan{ background: rgba(11,27,43,0.62); border:1px solid rgba(32,49,73,0.7); border-radius:12px; padding:18px; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,.35); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px) }
 .plan .price{ margin:10px 0 6px; font-weight:800; font-size:22px; color:var(--accent) }
 .plan.highlight{ outline:2px solid var(--accent); box-shadow: 0 8px 22px rgba(34,209,220,0.15) }

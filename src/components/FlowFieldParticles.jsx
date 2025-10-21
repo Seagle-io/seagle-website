@@ -64,7 +64,7 @@ export default function FlowFieldParticles({ fullscreen = false }){
       size: 0.06,
       sizeAttenuation: true,
       transparent: true,
-      opacity: 0.9,
+      opacity: 0.58, // softer base; CSS adds additional blur+opacity
       blending: THREE.AdditiveBlending,
       depthWrite: false,
     })
