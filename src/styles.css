@@ -81,6 +81,12 @@ body.no-scroll{ overflow:hidden }
 .panel h2{ margin:0 0 10px 0; font-size:18px }
 .hint{ color: var(--muted); margin: 0 0 8px 0 }
 textarea.prompt, textarea.code{ width:100%; min-height:140px; background:#0b1228; color:var(--text); border:1px solid var(--border); border-radius:8px; padding:12px; outline:none; resize:vertical }
+input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="search"], input[type="password"]{
+  width:100%; background:#0b1228; color:var(--text); border:1px solid var(--border); border-radius:8px; padding:10px 12px; outline:none;
+}
+.contact-form{ display:grid; gap:12px }
+.contact-form .form-row{ display:grid; gap:6px }
+.form-actions{ display:flex; justify-content:flex-end }
 textarea.code{ font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace }
 .has-error{ border-color: var(--error) }
 .error{ color: var(--error); margin-top: 6px }

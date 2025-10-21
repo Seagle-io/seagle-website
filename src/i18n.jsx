@@ -52,6 +52,18 @@ const dict = {
 
     'footer.made': 'SEAGLE — Solutions d’IA orientées modèle.',
     'footer.back': 'Retour en haut',
+
+    'contact.name': 'Nom',
+    'contact.email': 'Email',
+    'contact.subject': 'Sujet',
+    'contact.message': 'Message',
+    'contact.send': 'Envoyer',
+    'contact.success': 'Merci ! Votre client mail va s’ouvrir.',
+    'contact.error': 'Veuillez remplir les champs requis.',
+    'contact.defaultSubject': 'Demande de contact',
+    'contact.namePh': 'Votre nom',
+    'contact.subjectPh': 'Sujet (optionnel)',
+    'contact.messagePh': 'Décrivez votre besoin…',
   },
   en: {
     'navbar.product': 'Product',
@@ -102,6 +114,18 @@ const dict = {
 
     'footer.made': 'SEAGLE — Model‑oriented AI.',
     'footer.back': 'Back to top',
+
+    'contact.name': 'Name',
+    'contact.email': 'Email',
+    'contact.subject': 'Subject',
+    'contact.message': 'Message',
+    'contact.send': 'Send',
+    'contact.success': 'Thanks! Your mail client will open.',
+    'contact.error': 'Please fill in the required fields.',
+    'contact.defaultSubject': 'Contact request',
+    'contact.namePh': 'Your name',
+    'contact.subjectPh': 'Subject (optional)',
+    'contact.messagePh': 'Describe your needs…',
   },
 }
 
