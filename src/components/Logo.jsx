@@ -13,8 +13,7 @@ export default function Logo({ size = 22 }){
         <path d="M12 2l7.5 4.33v10.34L12 21 4.5 16.67V6.33L12 2z" stroke="url(#g1)" strokeWidth="1.5" fill="none"/>
         <path d="M8.5 12.2L12 7l3.5 5.2-3.5 2.3-3.5-2.3z" fill="#22D1DC" opacity="0.9"/>
       </svg>
-      <strong>SIGLE</strong><span style={{ color:'var(--accent)' }}>AI</span>
+      <strong>SEAGLE</strong><span style={{ color:'var(--accent)' }}>AI</span>
     </span>
   )
 }
-

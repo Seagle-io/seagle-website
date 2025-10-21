@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="footer-inner">
         <div className="made">{t('footer.made')}</div>
         <div className="links">
-          <a href="mailto:contact@sigle.ai">contact@sigle.ai</a>
+          <a href="mailto:contact@seagle.ai">contact@seagle.ai</a>
           <span>·</span>
           <a href="#top">{t('footer.back')}</a>
         </div>

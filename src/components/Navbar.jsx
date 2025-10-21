@@ -40,7 +40,7 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <div className="nav-inner">
-        <a href="#top" className="brand" aria-label="Sigle AI - Accueil"><Logo /></a>
+        <a href="#top" className="brand" aria-label="Seagle AI - Accueil"><Logo /></a>
         <button ref={buttonRef} className="burger" aria-label="Menu" aria-expanded={open} aria-controls={menuId} onClick={() => setOpen(v => !v)}>
           <span />
           <span />

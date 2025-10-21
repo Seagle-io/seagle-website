@@ -12,12 +12,12 @@ const dict = {
     'navbar.try': 'Essayer',
     'navbar.lang': 'EN',
 
-    'hero.title': 'Structurer l’IA selon votre modèle',
-    'hero.subtitle': 'SIGLE AI transforme vos descriptions en données propres et validées par votre modèle. Un rendu cohérent, simple à intégrer, taillé pour la production.',
+    'hero.title': 'Structurer selon votre modèle',
+    'hero.subtitle': 'Révélez le potentiel humain',
     'hero.try': 'Essayer la démo',
     'hero.discover': 'Découvrir le produit',
 
-    'product.title': 'Pourquoi SIGLE AI ?',
+    'product.title': 'Pourquoi SEAGLE ?',
     'product.lead': 'De la prose à la structure, sans friction.',
     'product.f1.title': 'Orienté modèle',
     'product.f1.desc': 'Définissez vos schémas, obtenez des sorties propres et validées. Plus de JSON approximatif.',
@@ -27,7 +27,7 @@ const dict = {
     'product.f3.desc': 'Des retours immédiats pour vos utilisateurs: aperçu, validation, correction.',
 
     'about.title': 'À propos',
-    'about.body': 'SIGLE AI est une jeune entreprise dédiée à l’IA orientée modèle. Notre mission: transformer des descriptions en données fiables et directement exploitables.',
+    'about.body': 'Seagle est une startup spécialisée dans l’intégration de l’intelligence artificielle au cœur des processus métiers. Nous aidons les entreprises à analyser, détecter et automatiser leurs tâches pour améliorer la performance, réduire les coûts et accélérer l’exécution… voir plus.',
 
     'pricing.title': 'Tarifs',
     'pricing.starter': 'Starter',
@@ -50,7 +50,7 @@ const dict = {
     'moai.copy': 'Copier JSON',
     'moai.export': 'Exporter JSON',
 
-    'footer.made': 'SIGLE AI — Solutions d’IA orientées modèle.',
+    'footer.made': 'SEAGLE — Solutions d’IA orientées modèle.',
     'footer.back': 'Retour en haut',
   },
   en: {
@@ -62,12 +62,12 @@ const dict = {
     'navbar.try': 'Try',
     'navbar.lang': 'FR',
 
-    'hero.title': 'Structure AI to match your model',
-    'hero.subtitle': 'SIGLE AI turns descriptions into clean, model‑validated data. Consistent results, easy to integrate, built for production.',
+    'hero.title': 'Structure to match your model',
+    'hero.subtitle': 'Reveal human potential',
     'hero.try': 'Try the demo',
     'hero.discover': 'See the product',
 
-    'product.title': 'Why SIGLE AI?',
+    'product.title': 'Why SEAGLE?',
     'product.lead': 'From prose to structure, without friction.',
     'product.f1.title': 'Model‑oriented',
     'product.f1.desc': 'Define schemas, get clean validated outputs. No more flaky JSON.',
@@ -77,7 +77,7 @@ const dict = {
     'product.f3.desc': 'Instant feedback for users: preview, validation, corrections.',
 
     'about.title': 'About',
-    'about.body': 'SIGLE AI builds model‑oriented AI. Our mission: turn descriptions into reliable, production‑ready data.',
+    'about.body': 'Seagle is a startup integrating AI into core business processes. We help companies analyze, detect, and automate tasks to improve performance and reduce costs… see more.',
 
     'pricing.title': 'Pricing',
     'pricing.starter': 'Starter',
@@ -100,7 +100,7 @@ const dict = {
     'moai.copy': 'Copy JSON',
     'moai.export': 'Export JSON',
 
-    'footer.made': 'SIGLE AI — Model‑oriented AI.',
+    'footer.made': 'SEAGLE — Model‑oriented AI.',
     'footer.back': 'Back to top',
   },
 }
@@ -113,4 +113,3 @@ export function I18nProvider({ children }) {
 }
 
 export function useI18n(){ return useContext(I18nContext) }
-
