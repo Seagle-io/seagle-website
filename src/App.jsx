@@ -4,8 +4,8 @@ import Hero from './components/Hero.jsx'
 import Footer from './components/Footer.jsx'
 import FlowFieldParticles from './components/FlowFieldParticles.jsx'
 import LogosMarquee from './components/LogosMarquee.jsx'
+import ContactTally from './components/ContactTally.jsx'
 import { useI18n } from './i18n.jsx'
-// import ModelOrientedAI from './pages/ModelOrientedAI.jsx'
 
 export default function App() {
   const { t } = useI18n()
@@ -71,7 +71,12 @@ export default function App() {
           </div>
         </section>
 
-        
+        <section id="contact" className="contact">
+          <div className="about-inner">
+            <ContactTally title={t('navbar.contact')} formId={import.meta.env.VITE_TALLY_FORM_ID || ''} />
+          </div>
+        </section>
+
       </main>
       <Footer />
     </div>
