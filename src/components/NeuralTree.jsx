@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 
-// Procedural neural tree overlay: branching links + glowing nodes
-export default function NeuralTree({ density = 'high' }){
+// Procedural neural tree overlay with continuous fractal growth (random, permanent)
+export default function NeuralTree({ density = 'medium' }){
   const canvasRef = useRef(null)
   const rafRef = useRef(0)
 
@@ -23,113 +23,111 @@ export default function NeuralTree({ density = 'high' }){
     const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100)
     camera.position.set(0, 0.2, 8)
 
-    // Subtle lights for ambient depth
+    // Lights
     scene.add(new THREE.AmbientLight(0x1a2a3f, 0.6))
-    const rim = new THREE.DirectionalLight(0x22d1dc, 0.5)
+    const rim = new THREE.DirectionalLight(0x22d1dc, 0.6)
     rim.position.set(3, 5, 8)
     scene.add(rim)
 
     const ACCENT = new THREE.Color('#22D1DC')
 
-    // Build branching structure with explicit node/edge indices
-    // Density presets tuned for moins de branches + croissance visible
+    // Presets for continuous growth
     const PRESETS = {
-      low:   { depth: 4, baseChildren: 1, extraProb: 0.15, baseLen: 1.4, spread: 0.5, maxLinks: 300,  growSpeed: 180 },
-      medium:{ depth: 5, baseChildren: 1, extraProb: 0.25, baseLen: 1.6, spread: 0.6, maxLinks: 600,  growSpeed: 220 },
-      high:  { depth: 6, baseChildren: 2, extraProb: 0.30, baseLen: 1.7, spread: 0.7, maxLinks: 900,  growSpeed: 260 },
-      ultra: { depth: 7, baseChildren: 2, extraProb: 0.40, baseLen: 1.8, spread: 0.8, maxLinks: 1200, growSpeed: 320 },
+      low:    { edgesCap: 700, nodesCap: 800, growPerSec: 2.0, segSpeed: 1.0, lenMin: 0.18, lenMax: 0.45, spread: 0.55, radius: 3.2 },
+      medium: { edgesCap: 1100,nodesCap: 1300,growPerSec: 3.0, segSpeed: 1.2, lenMin: 0.20, lenMax: 0.55, spread: 0.65, radius: 3.3 },
+      high:   { edgesCap: 1500,nodesCap: 1700,growPerSec: 4.0, segSpeed: 1.4, lenMin: 0.22, lenMax: 0.60, spread: 0.72, radius: 3.5 },
+      ultra:  { edgesCap: 2000,nodesCap: 2200,growPerSec: 5.0, segSpeed: 1.6, lenMin: 0.24, lenMax: 0.65, spread: 0.80, radius: 3.8 },
     }
-    const CFG = PRESETS[density] || PRESETS.high
+    const CFG = PRESETS[density] || PRESETS.medium
 
-    const links = [] // edges: {a: startIndex, b: endIndex, len}
-    const nodes = [] // node positions
-    function grow(originIndex, dir, len, spread, depth){
-      if (depth <= 0 || len < 0.12 || links.length >= CFG.maxLinks) return
-      const jitter = new THREE.Vector3(
-        (Math.random()-0.5) * spread,
-        (Math.random()-0.2) * spread,
-        (Math.random()-0.5) * spread
-      )
-      const origin = nodes[originIndex]
-      const end = origin.clone().add(dir.clone().multiplyScalar(len)).add(jitter)
-      const endIndex = nodes.push(end.clone()) - 1
-      links.push({ a: originIndex, b: endIndex, len: origin.distanceTo(end) })
-      // Children
-      let children = CFG.baseChildren
-      if (Math.random() < CFG.extraProb) children += 1
-      for (let i=0;i<children;i++){
-        const axis = new THREE.Vector3(Math.random(),Math.random(),Math.random()).normalize()
-        const angle = (0.35 + Math.random()*0.6) * (Math.random() < 0.5 ? 1 : -1)
-        const ndir = dir.clone().applyAxisAngle(axis, angle).normalize()
-        grow(endIndex, ndir, len* (0.72 + Math.random()*0.14), spread*0.76, depth-1)
-      }
-    }
+    // Group wrapper for gentle rotation
+    const group = new THREE.Group()
+    scene.add(group)
 
-    const root = new THREE.Vector3(-0.6, -0.8, 0)
-    const rootIndex = nodes.push(root.clone()) - 1
-    const upward = new THREE.Vector3(0.4, 1.4, 0.2).normalize()
-    grow(rootIndex, upward, CFG.baseLen, CFG.spread, CFG.depth)
-
-    // Geometry for links (lines)
-    const pos = new Float32Array(links.length * 2 * 3)
-    // init with zero-length segments (both endpoints at start) for growth tween
-    links.forEach((e, i) => {
-      const a = nodes[e.a]
-      pos[i*6+0] = a.x; pos[i*6+1] = a.y; pos[i*6+2] = a.z
-      pos[i*6+3] = a.x; pos[i*6+4] = a.y; pos[i*6+5] = a.z
-    })
+    // Lines buffer (preallocated)
+    const pos = new Float32Array(CFG.edgesCap * 6)
     const lineGeo = new THREE.BufferGeometry()
     lineGeo.setAttribute('position', new THREE.BufferAttribute(pos, 3))
     const lineMat = new THREE.LineBasicMaterial({ color: ACCENT, transparent:true, opacity:0.65, blending: THREE.AdditiveBlending })
     const network = new THREE.LineSegments(lineGeo, lineMat)
-    scene.add(network)
+    group.add(network)
 
-    // Instanced glowing nodes
-    const count = nodes.length
+    // Instanced nodes and soft points (bloom)
     const instGeo = new THREE.SphereGeometry(0.06, 10, 10)
     const instMat = new THREE.MeshBasicMaterial({ color: ACCENT, transparent:true, opacity:0.9 })
-    const inst = new THREE.InstancedMesh(instGeo, instMat, count)
+    const inst = new THREE.InstancedMesh(instGeo, instMat, CFG.nodesCap)
     const dummy = new THREE.Object3D()
-    const phases = new Float32Array(count)
-    nodes.forEach((p, i) => {
-      dummy.position.copy(p)
-      const s = 0.7 + Math.random()*0.6
-      dummy.scale.setScalar(s)
-      dummy.updateMatrix()
-      inst.setMatrixAt(i, dummy.matrix)
-      phases[i] = Math.random()*Math.PI*2
-    })
-    scene.add(inst)
-
-    // Soft bloom-ish sprites using Points
-    const pointsGeo = new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(nodes.flatMap(v=>[v.x,v.y,v.z]), 3))
-    const pts = new THREE.Points(pointsGeo, new THREE.PointsMaterial({ color: ACCENT, size: 6, sizeAttenuation: false, transparent:true, opacity:0.08 }))
-    scene.add(pts)
-
-    // Center structure
-    const box = new THREE.Box3().setFromObject(network)
-    const center = box.getCenter(new THREE.Vector3())
-    const size = box.getSize(new THREE.Vector3())
-    const scale = 3.6 / Math.max(size.x, size.y, size.z)
-    const group = new THREE.Group()
-    group.add(network)
+    const appear = new Float32Array(CFG.nodesCap).fill(0)
+    const phases = new Float32Array(CFG.nodesCap)
+    for (let i=0;i<CFG.nodesCap;i++) phases[i] = Math.random()*Math.PI*2
     group.add(inst)
-    group.add(pts)
-    group.position.sub(center)
-    group.scale.setScalar(scale)
-    scene.add(group)
 
-    // Determine a main growth path (spine): greedily follow longest child
-    const childrenByNode = Array(nodes.length).fill(0).map(()=>[])
-    links.forEach((e, idx)=>{ childrenByNode[e.a].push({ idx, len: e.len, next: e.b }) })
-    const growthOrder = []
-    let cur = rootIndex
-    while (childrenByNode[cur] && childrenByNode[cur].length){
-      const next = childrenByNode[cur].reduce((a,b)=> a.len>=b.len ? a : b)
-      growthOrder.push(next.idx)
-      cur = next.next
+    const pPos = new Float32Array(CFG.nodesCap * 3)
+    const pointsGeo = new THREE.BufferGeometry()
+    pointsGeo.setAttribute('position', new THREE.BufferAttribute(pPos, 3))
+    const pts = new THREE.Points(pointsGeo, new THREE.PointsMaterial({ color: ACCENT, size: 6, sizeAttenuation: false, transparent:true, opacity:0.08 }))
+    group.add(pts)
+
+    // State: ring buffers
+    let edgeWrite = 0, edgeDraw = 0
+    let nodeWrite = 0, nodeDraw = 0
+    const growing = [] // {slot, ax,ay,az, bx,by,bz, t}
+    const tips = [] // candidate Vector3 origins
+
+    // Seed with a root
+    const root = new THREE.Vector3(-0.6, -0.8, 0)
+    tips.push(root.clone())
+    // write root node
+    pPos[0] = root.x; pPos[1] = root.y; pPos[2] = root.z
+    pointsGeo.attributes.position.needsUpdate = true
+    nodeDraw = Math.min(nodeDraw+1, CFG.nodesCap)
+    dummy.position.copy(root); dummy.scale.setScalar(0.001); dummy.updateMatrix(); inst.setMatrixAt(nodeWrite, dummy.matrix)
+    inst.instanceMatrix.needsUpdate = true
+    appear[nodeWrite] = 1
+    nodeWrite = (nodeWrite + 1) % CFG.nodesCap
+
+    // Helpers
+    function randomDir(){
+      const up = new THREE.Vector3(0.3, 0.9, 0.2).normalize()
+      const axis = new THREE.Vector3(Math.random(),Math.random(),Math.random()).normalize()
+      const angle = (Math.random()*2-1) * CFG.spread
+      return up.clone().applyAxisAngle(axis, angle).normalize()
     }
-    for (let i=0;i<links.length;i++) if (!growthOrder.includes(i)) growthOrder.push(i)
+    function clampToRadius(v){
+      const r = CFG.radius
+      if (v.length() > r){ v.setLength(r) }
+      return v
+    }
+    function spawnEdge(){
+      if (reduced) return
+      const pick = tips.length ? tips[(tips.length-1 - Math.floor(Math.random()*Math.min(80, tips.length)))] : root
+      const a = pick.clone()
+      const dir = randomDir()
+      const len = THREE.MathUtils.lerp(CFG.lenMin, CFG.lenMax, Math.random())
+      const b = clampToRadius(a.clone().add(dir.multiplyScalar(len)))
+
+      const slot = edgeWrite
+      pos[slot*6+0] = a.x; pos[slot*6+1] = a.y; pos[slot*6+2] = a.z
+      pos[slot*6+3] = a.x; pos[slot*6+4] = a.y; pos[slot*6+5] = a.z
+      lineGeo.attributes.position.needsUpdate = true
+      edgeWrite = (edgeWrite + 1) % CFG.edgesCap
+      edgeDraw = Math.min(edgeDraw + 2, CFG.edgesCap * 2)
+      lineGeo.setDrawRange(0, edgeDraw)
+      growing.push({ slot, ax:a.x, ay:a.y, az:a.z, bx:b.x, by:b.y, bz:b.z, t:0 })
+
+      // record node
+      const nSlot = nodeWrite
+      pPos[nSlot*3+0] = b.x; pPos[nSlot*3+1] = b.y; pPos[nSlot*3+2] = b.z
+      pointsGeo.attributes.position.needsUpdate = true
+      nodeWrite = (nodeWrite + 1) % CFG.nodesCap
+      nodeDraw = Math.min(nodeDraw + 1, CFG.nodesCap)
+      appear[nSlot] = 0
+      dummy.position.set(b.x, b.y, b.z); dummy.scale.setScalar(0.001); dummy.updateMatrix(); inst.setMatrixAt(nSlot, dummy.matrix)
+      inst.instanceMatrix.needsUpdate = true
+
+      tips.push(b)
+      if (tips.length > 200) tips.shift()
+    }
 
     function fit(){
       const w = canvas.clientWidth || 560
@@ -140,83 +138,47 @@ export default function NeuralTree({ density = 'high' }){
     }
     fit()
 
-    // Growth animation state
-    const totalSegments = links.length
-    let grownSegments = 0 // side-branch reveal counter
-    let activeIndex = 0 // current edge in growthOrder
-    let segT = 0 // progress inside current edge
-    const appear = new Float32Array(count).fill(0) // per-node appear progress (0..1)
-    // start with nothing visible
-    lineGeo.setDrawRange(0, 0)
-    pointsGeo.setDrawRange(0, 0)
-
-    // Glowing head following growth tip
-    const headMat = new THREE.MeshBasicMaterial({ color: ACCENT, transparent:true, opacity:0.9 })
-    const head = new THREE.Mesh(new THREE.SphereGeometry(0.09, 12, 12), headMat)
-    scene.add(head)
-
     let last = performance.now()
+    let acc = 0
     let running = true
     const loop = () => {
       if (!running) return
       const now = performance.now()
       const dt = (now - last)/1000
       last = now
+
       if (!reduced){
-        if (activeIndex < growthOrder.length){
-          const edgeIdx = growthOrder[activeIndex]
-          const e = links[edgeIdx]
-          const a = nodes[e.a]
-          const b = nodes[e.b]
-          // advance within this edge
-          const speed = CFG.growSpeed / 420
-          segT = Math.min(1, segT + speed)
-          const cx = a.x + (b.x - a.x) * segT
-          const cy = a.y + (b.y - a.y) * segT
-          const cz = a.z + (b.z - a.z) * segT
-          const p = lineGeo.attributes.position
-          // keep start at a, move end from a->b
-          p.setXYZ(edgeIdx*2+1, cx, cy, cz)
-          p.needsUpdate = true
-          lineGeo.setDrawRange(0, activeIndex*2 + 2)
-          head.position.set(cx, cy, cz)
-          appear[e.b] += (1 - appear[e.b]) * Math.min(1, dt * 6)
+        // spawn edges
+        acc += dt * CFG.growPerSec
+        while (acc >= 1){ spawnEdge(); acc -= 1 }
 
-          if (segT >= 1){
-            // snap to b and move to next edge
-            p.setXYZ(edgeIdx*2+1, b.x, b.y, b.z)
-            p.needsUpdate = true
-            activeIndex += 1
-            segT = 0
-          }
-        } else {
-          // reveal remaining side branches gradually
-          grownSegments = Math.min(totalSegments, grownSegments + CFG.growSpeed * dt * 0.6)
-          const visSegs = Math.floor(grownSegments)
-          lineGeo.setDrawRange(0, Math.max(lineGeo.drawRange.count, visSegs * 2))
-          const visNodes = Math.min(count, visSegs + 1)
-          pointsGeo.setDrawRange(0, visNodes)
+        // advance growth
+        for (let i=growing.length-1; i>=0; i--){
+          const g = growing[i]
+          g.t = Math.min(1, g.t + dt * CFG.segSpeed)
+          const cx = g.ax + (g.bx - g.ax) * g.t
+          const cy = g.ay + (g.by - g.ay) * g.t
+          const cz = g.az + (g.bz - g.az) * g.t
+          pos[g.slot*6+3] = cx; pos[g.slot*6+4] = cy; pos[g.slot*6+5] = cz
+          if (g.t >= 1) growing.splice(i,1)
         }
+        lineGeo.attributes.position.needsUpdate = true
 
-        // Update node scales with pulse
-        for (let i=0;i<count;i++){
-          const phase = phases[i]
-          const pulse = 0.85 + Math.sin(now*0.003 + phase) * 0.15
+        // nodes scaling + pulse
+        for (let i=0;i<nodeDraw;i++){
+          appear[i] += (1 - appear[i]) * Math.min(1, dt * 4)
+          const pulse = 0.85 + Math.sin(now*0.003 + phases[i]) * 0.15
           const s = pulse * appear[i]
-          dummy.position.copy(nodes[i])
+          dummy.position.set(pPos[i*3+0], pPos[i*3+1], pPos[i*3+2])
           dummy.scale.setScalar(s)
           dummy.updateMatrix()
           inst.setMatrixAt(i, dummy.matrix)
         }
         inst.instanceMatrix.needsUpdate = true
 
-        // Slow idle rotation
-        group.rotation.y += dt * 0.06
-      } else {
-        // Reduced motion: show all instantly
-        lineGeo.setDrawRange(0, totalSegments * 2)
-        pointsGeo.setDrawRange(0, count)
+        group.rotation.y += dt * 0.05
       }
+
       renderer.render(scene, camera)
       rafRef.current = requestAnimationFrame(loop)
     }
@@ -248,3 +210,4 @@ export default function NeuralTree({ density = 'high' }){
     </div>
   )
 }
+
