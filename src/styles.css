@@ -129,6 +129,9 @@ details.details{ margin-top:8px }
 .logo-item span{ opacity:.9 }
 @keyframes marquee{ from{ transform: translateX(0) } to{ transform: translateX(-50%) } }
 
+/* Hide Trusted/Logos section on request */
+.trusted{ display:none !important }
+
 /* CONTACT */
 .contact{ position:relative; z-index:1; padding: 30px 20px }
 .tally-embed{ background: rgba(11,27,43,0.58); border:1px solid rgba(32,49,73,0.7); border-radius:12px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); overflow:hidden }

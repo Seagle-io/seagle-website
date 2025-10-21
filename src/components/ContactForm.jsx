@@ -42,9 +42,7 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="panel">
-      <h2>{t('navbar.contact')}</h2>
-      <form className="contact-form" onSubmit={onSubmit}>
+    <form className="contact-form" onSubmit={onSubmit}>
         <div className="form-row">
           <label>{t('contact.name')}</label>
           <input type="text" value={name} onChange={e=>setName(e.target.value)} placeholder={t('contact.namePh')} required />
@@ -65,8 +63,6 @@ export default function ContactForm() {
           <button className="primary" disabled={!isValid}>{t('contact.send')}</button>
         </div>
         {status ? <div className="hint" aria-live="polite">{status}</div> : null}
-      </form>
-    </div>
+    </form>
   )
 }
-
