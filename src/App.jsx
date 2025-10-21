@@ -3,8 +3,9 @@ import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
 import Footer from './components/Footer.jsx'
 import FlowFieldParticles from './components/FlowFieldParticles.jsx'
+import LogosMarquee from './components/LogosMarquee.jsx'
 import { useI18n } from './i18n.jsx'
-import ModelOrientedAI from './pages/ModelOrientedAI.jsx'
+// import ModelOrientedAI from './pages/ModelOrientedAI.jsx'
 
 export default function App() {
   const { t } = useI18n()
@@ -34,6 +35,8 @@ export default function App() {
             </div>
           </div>
         </section>
+
+        <LogosMarquee />
 
         <section id="about" className="about">
           <div className="about-inner">
@@ -68,13 +71,7 @@ export default function App() {
           </div>
         </section>
 
-        <section id="demo" className="demo">
-          <div className="demo-inner">
-            <h2>{t('demo.title')}</h2>
-            <p className="lead">{t('demo.lead')}</p>
-            <ModelOrientedAI />
-          </div>
-        </section>
+        
       </main>
       <Footer />
     </div>
