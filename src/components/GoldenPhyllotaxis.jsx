@@ -18,8 +18,8 @@ export default function GoldenPhyllotaxis(){
     let width = 0, height = 0, dpr = 1
     let maxR = 0
     let n = 0
+    let dir = 1 // 1: forward, -1: backward (va-et-vient)
     let maxPoints = 420
-    const points = [] // {x,y,r,alpha}
 
     const ACCENT = '#22D1DC'
     const BG_ALPHA = 0.0
@@ -36,52 +36,53 @@ export default function GoldenPhyllotaxis(){
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
       // radius with padding to avoid overflow on edges
       maxR = Math.min(width, height) * 0.46 - 8
-      // reset for a clean layout on resize
-      n = 0
-      points.length = 0
+      // keep n within bounds on resize
+      n = Math.max(0, Math.min(n, maxPoints))
       ctx.clearRect(0,0,width,height)
     }
     fit()
 
-    function step(addCount){
-      // compute spacing constant so that the last point reaches near maxR
-      const targetN = Math.min(maxPoints, n + addCount + 100)
-      const c = maxR / Math.sqrt(targetN)
-      for (let i = 0; i < addCount; i++){
-        const k = n + i
-        const r = c * Math.sqrt(k)
-        const a = k * GOLDEN_ANGLE
-        const x = width/2 + r * Math.cos(a)
-        const y = height/2 + r * Math.sin(a)
-        // clamp: skip points outside the frame padding
-        const margin = 6
-        if (x < margin || x > width - margin || y < margin || y > height - margin) continue
-        const size = 1.4 + (1.8 * (1 - r/maxR))
-        const alpha = 0.45 + 0.45 * (1 - r/maxR)
-        points.push({ x, y, r: size, alpha })
-      }
-      n += addCount
-      while (points.length > maxPoints) points.shift()
-      if (n >= maxPoints){
-        n = 0
-        points.length = 0
-        ctx.clearRect(0,0,width,height)
-      }
-    }
-
     function drawFrame(){
-      // no background color; fully transparent canvas each frame
+      // Transparent background each frame
       ctx.clearRect(0,0,width,height)
 
+      // Build a continuous spiral stroke using the golden angle
+      const c = maxR / Math.sqrt(maxPoints)
+      const margin = 6
       ctx.save()
       ctx.globalCompositeOperation = 'lighter'
-      for (let i = 0; i < points.length; i++){
-        const p = points[i]
+      ctx.lineWidth = 1.6
+      ctx.lineCap = 'round'
+      ctx.lineJoin = 'round'
+      ctx.shadowColor = ACCENT
+      ctx.shadowBlur = 14
+      ctx.strokeStyle = 'rgba(34, 209, 220, 0.85)'
+
+      if (n > 1){
         ctx.beginPath()
-        ctx.fillStyle = `rgba(34, 209, 220, ${p.alpha})`
-        ctx.shadowColor = ACCENT
-        ctx.shadowBlur = 14
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2)
+        for (let k = 0; k < n; k++){
+          const r = c * Math.sqrt(k)
+          const rc = Math.min(r, maxR - margin)
+          const a = k * GOLDEN_ANGLE
+          const x = width/2 + rc * Math.cos(a)
+          const y = height/2 + rc * Math.sin(a)
+          if (k === 0) ctx.moveTo(x, y)
+          else ctx.lineTo(x, y)
+        }
+        ctx.stroke()
+      }
+
+      // Draw a small head marker at the current tip
+      if (n > 0){
+        const r = c * Math.sqrt(n-1)
+        const rc = Math.min(r, maxR - margin)
+        const a = (n-1) * GOLDEN_ANGLE
+        const x = width/2 + rc * Math.cos(a)
+        const y = height/2 + rc * Math.sin(a)
+        const size = 2.0 + (2.0 * (1 - rc/maxR))
+        ctx.beginPath()
+        ctx.fillStyle = 'rgba(34, 209, 220, 0.95)'
+        ctx.arc(x, y, size, 0, Math.PI*2)
         ctx.fill()
       }
       ctx.restore()
@@ -89,19 +90,20 @@ export default function GoldenPhyllotaxis(){
 
     let running = true
     let last = performance.now()
+    const SPEED = 140 // points per second
     const loop = () => {
       if (!running) return
       const now = performance.now()
       const dt = (now - last)/1000
       last = now
       if (!reduced){
-        // add points at a speed proportional to size
-        const add = Math.max(1, Math.floor(40 * dt))
-        step(add)
+        const delta = Math.max(1, Math.floor(SPEED * dt))
+        n += dir * delta
+        if (n >= maxPoints){ n = maxPoints; dir = -1 }
+        if (n <= 0){ n = 0; dir = 1 }
         drawFrame()
-      } else if (n === 0) {
-        // static render
-        step(300)
+      } else {
+        n = Math.min(300, maxPoints)
         drawFrame()
       }
       rafRef.current = requestAnimationFrame(loop)

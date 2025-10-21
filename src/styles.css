@@ -8,6 +8,8 @@ html{ scroll-behavior:smooth }
 .skip-link:focus{ left:8px }
 
 .animated-bg{ position:absolute; inset:0; z-index:0; pointer-events:none }
+.flow-bg{ position:fixed; inset:0; z-index:-1; pointer-events:none }
+.flow-canvas{ width:100vw; height:100vh; display:block }
 .aurora-bg{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden }
 .aurora-bg .blob{ position:absolute; width:60vmax; height:60vmax; border-radius:50%; filter: blur(60px); opacity:0.5; mix-blend-mode:screen }
 .aurora-bg .b1{ left:-10vmax; top:-10vmax; background: radial-gradient(closest-side, rgba(34,209,220,0.35), rgba(34,209,220,0) 70%); animation: auroraMove1 42s linear infinite }

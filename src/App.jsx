@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from './components/Navbar.jsx'
 import Hero from './components/Hero.jsx'
 import Footer from './components/Footer.jsx'
-import AuroraBackground from './components/AuroraBackground.jsx'
+import FlowFieldParticles from './components/FlowFieldParticles.jsx'
 import { useI18n } from './i18n.jsx'
 import ModelOrientedAI from './pages/ModelOrientedAI.jsx'
 
@@ -10,7 +10,7 @@ export default function App() {
   const { t } = useI18n()
   return (
     <div className="app" id="top">
-      <AuroraBackground />
+      <FlowFieldParticles fullscreen />
       <Navbar />
       <main id="main">
         <Hero />
