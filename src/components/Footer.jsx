@@ -12,7 +12,7 @@ export default function Footer() {
           <span>·</span>
           <a href="#top">{t('footer.back')}</a>
         </div>
-        <div className="copy">© {new Date().getFullYear()} SIGLE AI — Tous droits réservés</div>
+        <div className="copy">© {new Date().getFullYear()} SEAGLE — Tous droits réservés</div>
       </div>
     </footer>
   )

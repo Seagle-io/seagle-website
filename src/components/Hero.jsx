@@ -10,8 +10,8 @@ export default function Hero() {
         <h1>{t('hero.title')}</h1>
         <p>{t('hero.subtitle')}</p>
         <div className="hero-cta">
-          <a className="btn primary" href="#demo">{t('hero.try')}</a>
-          <a className="btn ghost" href="#product">{t('hero.discover')}</a>
+          <a className="btn primary" href="#contact">{t('hero.try')}</a>
+          <a className="btn ghost" href="#contact">{t('hero.discover')}</a>
         </div>
       </div>
     </section>

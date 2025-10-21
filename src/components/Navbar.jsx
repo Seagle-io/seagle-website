@@ -50,12 +50,12 @@ export default function Navbar() {
         </button>
         <div id={menuId} ref={menuRef} className={`links ${open ? 'open' : ''}`} role="menu" onClick={() => setOpen(false)}>
           <a href="#product">{t('navbar.product')}</a>
-          <a href="#demo">{t('navbar.demo')}</a>
+          <a href="#contact">{t('navbar.demo')}</a>
           <a href="#about">{t('navbar.about')}</a>
           <a href="#pricing">{t('navbar.pricing')}</a>
           <a href="#contact">{t('navbar.contact')}</a>
           <button className="lang-switch" onClick={(e)=>{ e.stopPropagation(); setLang(lang==='fr'?'en':'fr') }}>{t('navbar.lang')}</button>
-          <a href="#demo" className="cta-small">{t('navbar.try')}</a>
+          <a href="#contact" className="cta-small">{t('navbar.try')}</a>
         </div>
       </div>
     </nav>

@@ -5,16 +5,16 @@ const I18nContext = createContext({ lang: 'fr', setLang: () => {}, t: (k) => k }
 const dict = {
   fr: {
     'navbar.product': 'Produit',
-    'navbar.demo': 'Démo',
+    'navbar.demo': 'Demande de démo',
     'navbar.about': 'À propos',
     'navbar.pricing': 'Tarifs',
     'navbar.contact': 'Contact',
-    'navbar.try': 'Essayer',
+    'navbar.try': 'Demander',
     'navbar.lang': 'EN',
 
     'hero.title': 'Structurer selon votre modèle',
     'hero.subtitle': 'Révélez le potentiel humain',
-    'hero.try': 'Essayer la démo',
+    'hero.try': 'Demandez une démo',
     'hero.discover': 'Découvrir le produit',
 
     'product.title': 'Pourquoi SEAGLE ?',
@@ -67,16 +67,16 @@ const dict = {
   },
   en: {
     'navbar.product': 'Product',
-    'navbar.demo': 'Demo',
+    'navbar.demo': 'Request a demo',
     'navbar.about': 'About',
     'navbar.pricing': 'Pricing',
     'navbar.contact': 'Contact',
-    'navbar.try': 'Try',
+    'navbar.try': 'Request',
     'navbar.lang': 'FR',
 
     'hero.title': 'Structure to match your model',
     'hero.subtitle': 'Reveal human potential',
-    'hero.try': 'Try the demo',
+    'hero.try': 'Request a demo',
     'hero.discover': 'See the product',
 
     'product.title': 'Why SEAGLE?',
