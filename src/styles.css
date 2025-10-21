@@ -135,6 +135,9 @@ details.details{ margin-top:8px }
 /* Hide Pricing section on request */
 .pricing{ display:none !important }
 
+/* Hide Product section on request */
+.product{ display:none !important }
+
 /* CONTACT */
 .contact{ position:relative; z-index:1; padding: 30px 20px }
 .tally-embed{ background: rgba(11,27,43,0.58); border:1px solid rgba(32,49,73,0.7); border-radius:12px; -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px); overflow:hidden }

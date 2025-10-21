@@ -49,7 +49,6 @@ export default function Navbar() {
           <span />
         </button>
         <div id={menuId} ref={menuRef} className={`links ${open ? 'open' : ''}`} role="menu" onClick={() => setOpen(false)}>
-          <a href="#product">{t('navbar.product')}</a>
           <a href="#contact">{t('navbar.demo')}</a>
           <a href="#about">{t('navbar.about')}</a>
           <a href="#contact">{t('navbar.contact')}</a>
