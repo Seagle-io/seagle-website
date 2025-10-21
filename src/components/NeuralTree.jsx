@@ -96,7 +96,24 @@ export default function NeuralTree({ density = 'medium' }){
       if (v.lengthSq() < 1e-5) v.set(0,1,0)
       return v.normalize()
     }
-    function clampToRadius(v){
+    const MIN_ANGLE = Math.PI/6 // 30 degrees minimum between consecutive segments
+    function enforceMinAngle(dir, prev){
+      if (!prev) return dir
+      const d = THREE.MathUtils.clamp(prev.dot(dir), -1, 1)
+      const angle = Math.acos(d)
+      if (angle >= MIN_ANGLE) return dir
+      const axis = new THREE.Vector3().crossVectors(prev, new THREE.Vector3(0,1,0))
+      if (axis.lengthSq() < 1e-6) axis.crossVectors(prev, new THREE.Vector3(1,0,0))
+      axis.normalize()
+      const delta = (MIN_ANGLE - angle) * (Math.random() < 0.5 ? 1 : -1)
+      dir.applyAxisAngle(axis, delta).normalize()
+      return dir
+    }
+    function clampToFrame(v){
+      const rx = CFG.radius * 0.95
+      const ry = CFG.radius * 0.75
+      v.x = Math.max(-rx, Math.min(rx, v.x))
+      v.y = Math.max(-ry, Math.min(ry, v.y))
       const r = CFG.radius
       if (v.length() > r){ v.setLength(r) }
       return v
@@ -106,10 +123,11 @@ export default function NeuralTree({ density = 'medium' }){
     const visibleQueue = [] // hold last N node slots
     const target = new Float32Array(CFG.nodesCap).fill(0) // 0..1 desired visibility per node
 
-    function enqueueSegment(aVec, dir, len, depth){
+    function enqueueSegment(aVec, dir, len, depth, prevDir){
       if (edgeDraw >= CFG.edgesCap * 2) return null
-      const a = clampToRadius(aVec.clone())
-      const b = clampToRadius(a.clone().add(dir.clone().multiplyScalar(len)))
+      const a = clampToFrame(aVec.clone())
+      dir = enforceMinAngle(dir.clone().normalize(), prevDir)
+      const b = clampToFrame(a.clone().add(dir.clone().multiplyScalar(len)))
       const slot = edgeWrite
       pos[slot*6+0] = a.x; pos[slot*6+1] = a.y; pos[slot*6+2] = a.z
       pos[slot*6+3] = a.x; pos[slot*6+4] = a.y; pos[slot*6+5] = a.z
@@ -146,8 +164,9 @@ export default function NeuralTree({ density = 'medium' }){
       const nextLen = seg.len * CFG.lenFactor
       // trunk continuation
       if (Math.random() < CFG.trunkBias){
-        const trunkDir = dir.clone().add(new THREE.Vector3(0, 0.25, 0)).normalize()
-        pending.unshift({ ax:a.x, ay:a.y, az:a.z, dirx:trunkDir.x, diry:trunkDir.y, dirz:trunkDir.z, len: nextLen, depth: seg.depth - 1, priority: 'trunk' })
+        let trunkDir = dir.clone().add(new THREE.Vector3(0, 0.25, 0)).normalize()
+        trunkDir = enforceMinAngle(trunkDir, dir)
+        pending.unshift({ ax:a.x, ay:a.y, az:a.z, dirx:trunkDir.x, diry:trunkDir.y, dirz:trunkDir.z, len: nextLen, depth: seg.depth - 1, priority: 'trunk', prevx:dir.x, prevy:dir.y, prevz:dir.z })
       }
       // limited side branches to keep tree-like look
       let sideCount = Math.random() < CFG.sideProb ? 2 : 1
@@ -158,11 +177,12 @@ export default function NeuralTree({ density = 'medium' }){
         const sign = i % 2 === 0 ? 1 : -1
         const rot = CFG.branchAngle * (0.85 + Math.random()*0.3) * sign
         const yaw = (Math.PI * (1 + Math.sqrt(5))) * (i+1)
-        const sideDir = dir.clone()
+        let sideDir = dir.clone()
           .applyAxisAngle(axis1, rot)
           .applyAxisAngle(axis2, Math.sin(yaw)*0.2)
           .normalize()
-        pending.push({ ax:a.x, ay:a.y, az:a.z, dirx:sideDir.x, diry:sideDir.y, dirz:sideDir.z, len: nextLen * (0.9 + Math.random()*0.2), depth: seg.depth - 1, priority: 'side' })
+        sideDir = enforceMinAngle(sideDir, dir)
+        pending.push({ ax:a.x, ay:a.y, az:a.z, dirx:sideDir.x, diry:sideDir.y, dirz:sideDir.z, len: nextLen * (0.9 + Math.random()*0.2), depth: seg.depth - 1, priority: 'side', prevx:dir.x, prevy:dir.y, prevz:dir.z })
       }
     }
 
@@ -193,7 +213,8 @@ export default function NeuralTree({ density = 'medium' }){
           const d = pending.shift()
           const aVec = new THREE.Vector3(d.ax, d.ay, d.az)
           const dir = new THREE.Vector3(d.dirx, d.diry, d.dirz)
-          enqueueSegment(aVec, dir, d.len, d.depth)
+          const prev = (d.prevx !== undefined) ? new THREE.Vector3(d.prevx, d.prevy, d.prevz) : null
+          enqueueSegment(aVec, dir, d.len, d.depth, prev)
         }
         // advance growth
         for (let i=growing.length-1; i>=0; i--){
