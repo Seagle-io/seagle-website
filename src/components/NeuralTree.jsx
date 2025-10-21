@@ -90,24 +90,21 @@ export default function NeuralTree({ density = 'medium' }){
     nodeWrite = (nodeWrite + 1) % CFG.nodesCap
 
     // Helpers
-    function randomDir(base){
-      // Stronger upward bias; spread increases with height to mimic tree crown
-      const up = new THREE.Vector3(0.12, 1.0, 0.06).normalize()
-      const axis = new THREE.Vector3(Math.random(),Math.random(),Math.random()).normalize()
-      const heightFactor = Math.min(1, ((base?.y ?? 0) + 1.2) / 2.2) // ~0 at bottom -> ~1 near top
-      const localSpread = CFG.spread * (0.35 + 0.65 * heightFactor)
-      const angle = (Math.random()*2-1) * localSpread
-      return up.clone().applyAxisAngle(axis, angle).normalize()
+    function randomDir(){
+      // Uniform random direction (points go in all directions)
+      let v = new THREE.Vector3(Math.random()*2-1, Math.random()*2-1, Math.random()*2-1)
+      if (v.lengthSq() < 1e-5) v.set(0,1,0)
+      return v.normalize()
     }
     function clampToRadius(v){
       const r = CFG.radius
       if (v.length() > r){ v.setLength(r) }
       return v
     }
-    const EDGE_TTL = 12.0
-    const EDGE_FADE = 4.0
-    const NODE_TTL = 14.0
-    const NODE_FADE = 5.0
+    // Visibility control
+    const MAX_VISIBLE_POINTS = 8
+    const visibleQueue = [] // hold last N node slots
+    const target = new Float32Array(CFG.nodesCap).fill(0) // 0..1 desired visibility per node
 
     function enqueueSegment(aVec, dir, len, depth){
       if (edgeDraw >= CFG.edgesCap * 2) return null
@@ -131,7 +128,12 @@ export default function NeuralTree({ density = 'medium' }){
       nodeWrite = (nodeWrite + 1) % CFG.nodesCap
       nodeDraw = Math.min(nodeDraw + 1, CFG.nodesCap)
       appear[nSlot] = 0
-      nodeTimes[nSlot] = performance.now()/1000
+      target[nSlot] = 1
+      visibleQueue.push(nSlot)
+      while (visibleQueue.length > MAX_VISIBLE_POINTS){
+        const old = visibleQueue.shift()
+        target[old] = 0
+      }
       dummy.position.set(b.x, b.y, b.z); dummy.scale.setScalar(0.001); dummy.updateMatrix(); inst.setMatrixAt(nSlot, dummy.matrix)
       inst.instanceMatrix.needsUpdate = true
       return { b, dir }
@@ -172,7 +174,7 @@ export default function NeuralTree({ density = 'medium' }){
       camera.updateProjectionMatrix()
     }
     // Kick off initial trunk (queued so only one grows at a time)
-    const initialDir = randomDir(root)
+    const initialDir = randomDir()
     const initLen = THREE.MathUtils.lerp(CFG.lenMin, CFG.lenMax, 0.8)
     pending.push({ ax: root.x, ay: root.y, az: root.z, dirx: initialDir.x, diry: initialDir.y, dirz: initialDir.z, len: initLen, depth: CFG.maxDepth, priority: 'trunk' })
     fit()
@@ -205,27 +207,12 @@ export default function NeuralTree({ density = 'medium' }){
         }
         lineGeo.attributes.position.needsUpdate = true
 
-        // Fade out oldest edges over time
-        const nowSec = now/1000
-        for (let s=0; s<CFG.edgesCap; s++){
-          const st = edgeStore[s]
-          if (!st || slotGrowing[s]) continue
-          const age = nowSec - st.t0
-          if (age > EDGE_TTL){
-            const f = Math.min(1, (age - EDGE_TTL)/EDGE_FADE)
-            // shrink end towards start
-            pos[s*6+3] = st.bx + (st.ax - st.bx) * f
-            pos[s*6+4] = st.by + (st.ay - st.by) * f
-            pos[s*6+5] = st.bz + (st.az - st.bz) * f
-          }
-        }
-        lineGeo.attributes.position.needsUpdate = true
+        // Edge shrink disabled to preserve distances between points
+        // lineGeo.attributes.position.needsUpdate = true
 
-        // nodes scaling + pulse
+        // nodes scaling + pulse (limit visible to last MAX_VISIBLE_POINTS)
         for (let i=0;i<nodeDraw;i++){
-          const age = (now/1000) - (nodeTimes[i] || 0)
-          const target = age > NODE_TTL ? 0 : 1
-          appear[i] += (target - appear[i]) * Math.min(1, dt * (target ? 4 : (1/NODE_FADE)*4))
+          appear[i] += ((target[i]||0) - appear[i]) * Math.min(1, dt * 4)
           const pulse = 0.85 + Math.sin(now*0.003 + phases[i]) * 0.15
           const s = pulse * appear[i]
           dummy.position.set(pPos[i*3+0], pPos[i*3+1], pPos[i*3+2])
