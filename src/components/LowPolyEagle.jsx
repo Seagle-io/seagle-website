@@ -32,8 +32,8 @@ export default function LowPolyEagle(){
 
     // Materials
     const ACCENT = new THREE.Color('#22D1DC')
-    const meshMat = new THREE.MeshStandardMaterial({ color: ACCENT, transparent:true, opacity:0.12, metalness:0.2, roughness:0.8 })
-    const lineMat = new THREE.LineBasicMaterial({ color: ACCENT, transparent:true, opacity:0.6 })
+    const meshMat = new THREE.MeshStandardMaterial({ color: ACCENT, transparent:true, opacity:0.18, metalness:0.15, roughness:0.85 })
+    const lineMat = new THREE.LineBasicMaterial({ color: ACCENT, transparent:true, opacity:0.85, blending: THREE.AdditiveBlending })
 
     const eagle = new THREE.Group()
     scene.add(eagle)
@@ -97,8 +97,9 @@ export default function LowPolyEagle(){
     eagle.rotation.set(0.08, -0.2, 0)
 
     function fit(){
-      const w = wrap.clientWidth || 600
-      const h = wrap.clientHeight || 260
+      const el = canvasRef.current
+      const w = (el?.clientWidth || 600)
+      const h = (el?.clientHeight || 260)
       renderer.setSize(w, h, false)
       camera.aspect = w / h
       camera.updateProjectionMatrix()
@@ -149,4 +150,3 @@ export default function LowPolyEagle(){
     </div>
   )
 }
-
