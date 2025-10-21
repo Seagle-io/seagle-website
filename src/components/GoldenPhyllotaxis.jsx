@@ -18,11 +18,11 @@ export default function GoldenPhyllotaxis(){
     let width = 0, height = 0, dpr = 1
     let maxR = 0
     let n = 0
-    let maxPoints = 1100
+    let maxPoints = 420
     const points = [] // {x,y,r,alpha}
 
     const ACCENT = '#22D1DC'
-    const BG_ALPHA = 0.08
+    const BG_ALPHA = 0.0
     const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5)) // ~2.399963
 
     function fit(){
@@ -34,7 +34,8 @@ export default function GoldenPhyllotaxis(){
       canvas.style.width = width + 'px'
       canvas.style.height = height + 'px'
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      maxR = Math.min(width, height) * 0.46
+      // radius with padding to avoid overflow on edges
+      maxR = Math.min(width, height) * 0.46 - 8
       // reset for a clean layout on resize
       n = 0
       points.length = 0
@@ -44,7 +45,7 @@ export default function GoldenPhyllotaxis(){
 
     function step(addCount){
       // compute spacing constant so that the last point reaches near maxR
-      const targetN = Math.min(maxPoints, n + addCount + 200)
+      const targetN = Math.min(maxPoints, n + addCount + 100)
       const c = maxR / Math.sqrt(targetN)
       for (let i = 0; i < addCount; i++){
         const k = n + i
@@ -52,7 +53,10 @@ export default function GoldenPhyllotaxis(){
         const a = k * GOLDEN_ANGLE
         const x = width/2 + r * Math.cos(a)
         const y = height/2 + r * Math.sin(a)
-        const size = 1.6 + (2.2 * (1 - r/maxR))
+        // clamp: skip points outside the frame padding
+        const margin = 6
+        if (x < margin || x > width - margin || y < margin || y > height - margin) continue
+        const size = 1.4 + (1.8 * (1 - r/maxR))
         const alpha = 0.45 + 0.45 * (1 - r/maxR)
         points.push({ x, y, r: size, alpha })
       }
@@ -61,9 +65,8 @@ export default function GoldenPhyllotaxis(){
     }
 
     function drawFrame(){
-      // subtle trail
-      ctx.fillStyle = `rgba(11, 27, 43, ${BG_ALPHA})`
-      ctx.fillRect(0,0,width,height)
+      // no background color; fully transparent canvas each frame
+      ctx.clearRect(0,0,width,height)
 
       ctx.save()
       ctx.globalCompositeOperation = 'lighter'
@@ -88,12 +91,12 @@ export default function GoldenPhyllotaxis(){
       last = now
       if (!reduced){
         // add points at a speed proportional to size
-        const add = Math.max(1, Math.floor(80 * dt))
+        const add = Math.max(1, Math.floor(40 * dt))
         step(add)
         drawFrame()
       } else if (n === 0) {
         // static render
-        step(900)
+        step(300)
         drawFrame()
       }
       rafRef.current = requestAnimationFrame(loop)
@@ -123,4 +126,3 @@ export default function GoldenPhyllotaxis(){
     </div>
   )
 }
-
