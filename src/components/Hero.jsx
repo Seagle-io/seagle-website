@@ -1,12 +1,12 @@
 import React from 'react'
 import { useI18n } from '../i18n.jsx'
-import OrigamiEagle from './OrigamiEagle.jsx'
+import NeuralTree from './NeuralTree.jsx'
 
 export default function Hero() {
   const { t } = useI18n()
   return (
     <section id="hero" className="hero" aria-label="Présentation">
-      <OrigamiEagle />
+      <NeuralTree />
       <div className="hero-inner">
         <h1>{t('hero.title')}</h1>
         <p>{t('hero.subtitle')}</p>

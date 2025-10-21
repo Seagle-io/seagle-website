@@ -39,3 +39,9 @@ Un workflow est prêt: `.github/workflows/deploy.yml`.
 3) Le site sera disponible à l’URL fournie par l’action (souvent `https://<votre-user>.github.io/seagle-website/`).
 
 Vite ajuste automatiquement `base` pour GitHub Pages lors du build en CI.
+
+## Modèle 3D (Aigle)
+
+- Placez un modèle GLB/GLTF d’aigle dans `public/models/eagle.glb`.
+- Le composant charge automatiquement ce fichier. En cas d’échec, un oiseau procédural s’affiche en fallback.
+- Formats: `.glb` recommandé. Si le fichier s’appelle autrement, modifiez `src/components/GltfEagle.jsx` prop `src` dans `Hero.jsx`.
