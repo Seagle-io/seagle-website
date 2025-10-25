@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useI18n } from '../i18n.jsx'
+import ThemeSwitcher from './ThemeSwitcher.jsx'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
@@ -8,7 +9,14 @@ export default function Navbar() {
   const buttonRef = useRef(null)
   const menuId = 'primary-nav'
 
-  // Close on Escape and trap focus while menu open
+  const links = [
+    { href: '#hero', label: t('navbar.hero') },
+    { href: '#sofia', label: t('navbar.sofia') },
+    { href: '#features', label: t('navbar.features') },
+    { href: '#branding', label: t('navbar.branding') },
+    { href: '#values', label: t('navbar.values') },
+  ]
+
   useEffect(() => {
     if (!open) return
     const firstFocusable = menuRef.current?.querySelector('a,button')
@@ -23,9 +31,11 @@ export default function Navbar() {
         if (focusables.length === 0) return
         const idx = focusables.indexOf(document.activeElement)
         if (e.shiftKey && (idx <= 0)){
-          e.preventDefault(); focusables[focusables.length-1].focus()
+          e.preventDefault()
+          focusables[focusables.length-1].focus()
         } else if (!e.shiftKey && (idx === focusables.length-1)){
-          e.preventDefault(); focusables[0].focus()
+          e.preventDefault()
+          focusables[0].focus()
         }
       }
     }
@@ -36,24 +46,49 @@ export default function Navbar() {
       document.body.classList.remove('no-scroll')
     }
   }, [open])
+
   return (
-    <nav className="navbar">
+    <nav className="navbar" aria-label="Navigation principale">
       <div className="nav-inner">
-        <a href="#top" className="brand" aria-label="Seagle AI - Accueil">
+        <a href="#top" className="brand" aria-label="Seagle - Accueil">
           <span className="brand-logo" aria-hidden="true" />
           <strong>SEAGLE</strong>
         </a>
-        <button ref={buttonRef} className="burger" aria-label="Menu" aria-expanded={open} aria-controls={menuId} onClick={() => setOpen(v => !v)}>
+        <button
+          ref={buttonRef}
+          className="burger"
+          aria-label="Menu"
+          aria-expanded={open}
+          aria-controls={menuId}
+          onClick={() => setOpen(v => !v)}
+        >
           <span />
           <span />
           <span />
         </button>
-        <div id={menuId} ref={menuRef} className={`links ${open ? 'open' : ''}`} role="menu" onClick={() => setOpen(false)}>
-          <a href="#contact">{t('navbar.demo')}</a>
-          <a href="#about">{t('navbar.about')}</a>
+        <div
+          id={menuId}
+          ref={menuRef}
+          className={`links ${open ? 'open' : ''}`}
+          role="menu"
+          onClick={() => setOpen(false)}
+        >
+          {links.map(link => (
+            <a key={link.href} href={link.href}>{link.label}</a>
+          ))}
+          <a href="#demo">{t('navbar.demo')}</a>
           <a href="#contact">{t('navbar.contact')}</a>
-          <button className="lang-switch" onClick={(e)=>{ e.stopPropagation(); setLang(lang==='fr'?'en':'fr') }}>{t('navbar.lang')}</button>
-          <a href="#contact" className="cta-small">{t('navbar.try')}</a>
+          <ThemeSwitcher />
+          <button
+            className="lang-switch"
+            onClick={(e) => {
+              e.stopPropagation()
+              setLang(lang === 'fr' ? 'en' : 'fr')
+            }}
+          >
+            {t('navbar.lang')}
+          </button>
+          <a href="#demo" className="cta-small">{t('hero.cta')}</a>
         </div>
       </div>
     </nav>

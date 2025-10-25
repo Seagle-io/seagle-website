@@ -22,7 +22,7 @@ export default function ContactForm() {
       setStatus(t('contact.error'))
       return
     }
-    const to = 'contact@seagle.ai'
+    const to = 'contact@seagle.io'
     const subj = encodeURIComponent(`Seagle Contact: ${subject || t('contact.defaultSubject')}`)
     const bodyLines = [
       `${t('contact.name')}: ${name}`,
