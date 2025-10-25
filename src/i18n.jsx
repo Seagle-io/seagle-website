@@ -6,7 +6,6 @@ const dict = {
   fr: {
     'navbar.hero': 'Accueil',
     'navbar.features': 'Fonctionnalités',
-    'navbar.catalog': 'Produits',
     'navbar.demo': 'Demande de démo',
     'navbar.contact': 'Contact',
     'navbar.products': 'Produits',

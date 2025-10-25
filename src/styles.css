@@ -129,11 +129,12 @@ section{ scroll-margin-top:80px }
   text-decoration:none;
 }
 .brand-logo{
-  width:30px;
-  height:30px;
-  border-radius:50%;
-  background: radial-gradient(circle at 30% 30%, #38d7e1, #0a1e3f);
-  box-shadow:0 6px 20px rgba(24,184,196,0.45);
+  width:40px;
+  height:40px;
+  background-image:url('/models/favicon.png');
+  background-size:contain;
+  background-position:center;
+  background-repeat:no-repeat;
 }
 .burger{
   display:none;
@@ -167,6 +168,12 @@ section{ scroll-margin-top:80px }
   opacity:1;
   color:var(--accent-2);
   font-weight:700;
+}
+
+html[data-theme="light"] .navbar{
+  background: linear-gradient(90deg, rgba(255,255,255,0.94), rgba(236,244,255,0.8));
+  border-bottom:1px solid rgba(12,52,72,0.08);
+  box-shadow:0 6px 20px rgba(12,32,52,0.08);
 }
 .cta-small{
   padding:10px 16px;
@@ -392,7 +399,7 @@ section{ scroll-margin-top:80px }
   color:var(--text);
   background:rgba(6,18,33,0.72);
   border:1px solid rgba(24,184,196,0.22);
-  transition:border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  transition:border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
   box-shadow:0 18px 36px rgba(5,14,26,0.28);
   min-height:112px;
 }
@@ -420,6 +427,22 @@ section{ scroll-margin-top:80px }
 .reassurance-text span{
   font-size:14px;
   color:var(--muted);
+}
+html[data-theme="light"] .reassurance-link{
+  color:#05202a;
+  background:rgba(255,255,255,0.96);
+  border:1px solid rgba(12,52,72,0.12);
+  box-shadow:0 16px 34px rgba(5,14,26,0.18);
+}
+html[data-theme="light"] .reassurance-link:hover,
+html[data-theme="light"] .reassurance-link:focus-visible{
+  box-shadow:0 24px 46px rgba(5,14,26,0.22);
+}
+html[data-theme="light"] .reassurance-text strong{
+  color:var(--accent);
+}
+html[data-theme="light"] .reassurance-text span{
+  color:rgba(5,32,42,0.72);
 }
 @keyframes orbitSpin{
   from{ transform:rotate(0deg) }
@@ -1150,6 +1173,8 @@ section{ scroll-margin-top:80px }
   font-family:var(--font);
   font-size:15px;
   transition:border-color 0.3s ease, box-shadow 0.3s ease;
+  resize:vertical;
+  max-width:100%;
 }
 .contact-form input:focus,
 .contact-form textarea:focus{

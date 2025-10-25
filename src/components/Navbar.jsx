@@ -12,7 +12,6 @@ export default function Navbar({ navigate, currentPage = 'home' }) {
   const anchorLinks = [
     { key: 'hero', hash: 'hero', label: t('navbar.hero') },
     { key: 'features', hash: 'features', label: t('navbar.features') },
-    { key: 'catalog', hash: 'catalog', label: t('navbar.catalog') },
     { key: 'contact', hash: 'contact', label: t('navbar.contact') },
   ]
 
