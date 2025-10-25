@@ -6,17 +6,26 @@ import BackgroundWave from './components/BackgroundWave.jsx'
 import FlowFieldParticles from './components/FlowFieldParticles.jsx'
 import ContactForm from './components/ContactForm.jsx'
 import ThemeSwitcher from './components/ThemeSwitcher.jsx'
+import ReassuranceRibbon from './components/ReassuranceRibbon.jsx'
 import { useI18n } from './i18n.jsx'
 
-export default function App() {
+export default function App({ navigate }) {
   const { t } = useI18n()
+  const catalog = [
+    { key: 'core', title: t('catalog.core.title'), desc: t('catalog.core.desc') },
+    { key: 'journeys', title: t('catalog.journeys.title'), desc: t('catalog.journeys.desc') },
+    { key: 'qa', title: t('catalog.qa.title'), desc: t('catalog.qa.desc') },
+    { key: 'insights', title: t('catalog.insights.title'), desc: t('catalog.insights.desc') },
+    { key: 'studio', title: t('catalog.studio.title'), desc: t('catalog.studio.desc') },
+    { key: 'workspace', title: t('catalog.workspace.title'), desc: t('catalog.workspace.desc') },
+  ]
   return (
     <div className="app" id="top">
       <FlowFieldParticles fullscreen />
-      <Navbar />
+      <Navbar navigate={navigate} currentPage="home" />
       <BackgroundWave />
       <main id="main">
-        <Hero />
+        <Hero navigate={navigate} />
 
         <section id="sofia" className="sofia section">
           <div className="section-inner">
@@ -58,6 +67,34 @@ export default function App() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="catalog" className="catalog section">
+          <div className="section-inner">
+            <div className="section-header">
+              <span className="section-label">{t('catalog.label')}</span>
+              <h2>{t('catalog.title')}</h2>
+              <p className="lead">{t('catalog.lead')}</p>
+            </div>
+            <div className="catalog-grid">
+              {catalog.map(item => (
+                <article key={item.key} className="catalog-card">
+                  <header>
+                    <span className="catalog-pill">{t('catalog.pill')}</span>
+                    <h3>{item.title}</h3>
+                  </header>
+                  <p>{item.desc}</p>
+                  <button
+                    type="button"
+                    className="catalog-link"
+                    onClick={() => navigate?.('/produits')}
+                  >
+                    {t('catalog.link')}
+                  </button>
+                </article>
+              ))}
             </div>
           </div>
         </section>
@@ -185,6 +222,7 @@ export default function App() {
           </div>
         </section>
       </main>
+      <ReassuranceRibbon />
       <Footer />
     </div>
   )

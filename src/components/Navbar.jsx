@@ -2,19 +2,18 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useI18n } from '../i18n.jsx'
 import ThemeSwitcher from './ThemeSwitcher.jsx'
 
-export default function Navbar() {
+export default function Navbar({ navigate, currentPage = 'home' }) {
   const [open, setOpen] = useState(false)
   const { t, lang, setLang } = useI18n()
   const menuRef = useRef(null)
   const buttonRef = useRef(null)
   const menuId = 'primary-nav'
 
-  const links = [
-    { href: '#hero', label: t('navbar.hero') },
-    { href: '#sofia', label: t('navbar.sofia') },
-    { href: '#features', label: t('navbar.features') },
-    { href: '#branding', label: t('navbar.branding') },
-    { href: '#values', label: t('navbar.values') },
+  const anchorLinks = [
+    { key: 'hero', hash: 'hero', label: t('navbar.hero') },
+    { key: 'features', hash: 'features', label: t('navbar.features') },
+    { key: 'catalog', hash: 'catalog', label: t('navbar.catalog') },
+    { key: 'contact', hash: 'contact', label: t('navbar.contact') },
   ]
 
   useEffect(() => {
@@ -47,10 +46,37 @@ export default function Navbar() {
     }
   }, [open])
 
+  function handleAnchorClick(e, hash){
+    e.preventDefault()
+    setOpen(false)
+    const target = document.getElementById(hash)
+    if (target){
+      requestAnimationFrame(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }))
+      return
+    }
+    navigate?.('/')
+    setTimeout(() => {
+      const homeTarget = document.getElementById(hash)
+      homeTarget?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 80)
+  }
+  function handleBrandClick(e){
+    if (currentPage === 'home') return
+    e.preventDefault()
+    setOpen(false)
+    navigate?.('/')
+  }
+
+  function goToProducts(e){
+    e.preventDefault()
+    setOpen(false)
+    navigate?.('/produits')
+  }
+
   return (
     <nav className="navbar" aria-label="Navigation principale">
       <div className="nav-inner">
-        <a href="#top" className="brand" aria-label="Seagle - Accueil">
+        <a href="/" className="brand" aria-label="Seagle - Accueil" onClick={handleBrandClick}>
           <span className="brand-logo" aria-hidden="true" />
           <strong>SEAGLE</strong>
         </a>
@@ -71,13 +97,23 @@ export default function Navbar() {
           ref={menuRef}
           className={`links ${open ? 'open' : ''}`}
           role="menu"
-          onClick={() => setOpen(false)}
         >
-          {links.map(link => (
-            <a key={link.href} href={link.href}>{link.label}</a>
+          {anchorLinks.map(link => (
+            <a
+              key={link.key}
+              href={currentPage === 'home' ? `#${link.hash}` : `/#${link.hash}`}
+              onClick={(e) => handleAnchorClick(e, link.hash)}
+            >
+              {link.label}
+            </a>
           ))}
-          <a href="#demo">{t('navbar.demo')}</a>
-          <a href="#contact">{t('navbar.contact')}</a>
+          <a
+            href="/produits"
+            onClick={goToProducts}
+            aria-current={currentPage === 'products' ? 'page' : undefined}
+          >
+            {t('navbar.products')}
+          </a>
           <ThemeSwitcher />
           <button
             className="lang-switch"
@@ -88,7 +124,9 @@ export default function Navbar() {
           >
             {t('navbar.lang')}
           </button>
-          <a href="#demo" className="cta-small">{t('hero.cta')}</a>
+          <a href="#demo" className="cta-small" onClick={(e) => handleAnchorClick(e, 'demo')}>
+            {t('hero.cta')}
+          </a>
         </div>
       </div>
     </nav>
