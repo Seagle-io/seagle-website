@@ -177,12 +177,24 @@ const dict = {
     'security.sections.quantum.title': 'Sécurité quantum proof',
     'security.sections.quantum.body': 'Nos mécanismes cryptographiques anticipent les menaces post-quantiques, préservant la confidentialité et l’intégrité de vos données dans la durée.',
 
+    'engagement.meta.title': 'Seagle - Charte d’engagement – 1 % pour le bien commun',
+    'engagement.meta.description': 'Découvrez comment Seagle reverse 1 % de son chiffre d’affaires pour soutenir des causes d’intérêt général et promouvoir un impact durable.',
+    'engagement.heading': 'Charte d’engagement – 1 % pour le bien commun',
+    'engagement.intro': 'Nous croyons qu’une entreprise doit agir pour la société. Chaque année, nous reversons 1 % de notre chiffre d’affaires à une association d’utilité publique, pour soutenir des causes essentielles et contribuer à un avenir plus juste et durable.',
+    'engagement.sections.conviction.title': 'Notre conviction',
+    'engagement.sections.conviction.body': 'Innover ne suffit pas : nous assumons un impact social et environnemental en plaçant l’humain, la santé et la planète au cœur de nos décisions.',
+    'engagement.sections.commitment.title': 'Notre engagement',
+    'engagement.sections.commitment.body': 'Chaque année, 1 % de notre chiffre d’affaires est reversé à une association reconnue d’utilité publique choisie pour son impact concret dans la santé, l’éducation, l’environnement ou l’inclusion.',
+    'engagement.sections.pasteur.title': 'Engagement 2025 – Institut Pasteur',
+    'engagement.sections.pasteur.body': 'En 2025, nous soutenons l’Institut Pasteur, acteur majeur de la recherche médicale et de la lutte contre le cancer. Cet engagement témoigne de notre volonté de mettre l’innovation et la technologie au service de la vie.',
+
     'theme.toLight': 'Activer le mode clair',
     'theme.toDark': 'Activer le mode sombre',
     'theme.lightLabel': 'Mode clair',
     'theme.darkLabel': 'Mode sombre',
 
     'footer.made': 'SEAGLE - IA visuelle made in France.',
+    'footer.charter': 'Charte d’engagement',
     'footer.back': 'Retour en haut',
     'footer.copy': 'Tous droits réservés',
 
@@ -374,12 +386,24 @@ const dict = {
     'security.sections.quantum.title': 'Quantum-proof security',
     'security.sections.quantum.body': 'Advanced cryptography anticipates post-quantum threats, preserving the confidentiality and integrity of your data in the long term.',
 
+    'engagement.meta.title': 'Seagle - Engagement Charter – 1% for the Common Good',
+    'engagement.meta.description': 'Learn how Seagle donates 1% of its annual revenue to public-interest causes and builds a lasting, responsible impact.',
+    'engagement.heading': 'Engagement Charter – 1% for the Common Good',
+    'engagement.intro': 'We believe companies have a role to play in society. Every year, we donate 1% of our revenue to a public-interest association to support essential causes and build a fairer, healthier, and more sustainable future.',
+    'engagement.sections.conviction.title': 'Our conviction',
+    'engagement.sections.conviction.body': 'Innovation matters only when paired with social and environmental impact. We place people, health, and the planet at the center of every decision.',
+    'engagement.sections.commitment.title': 'Our commitment',
+    'engagement.sections.commitment.body': 'Each year, 1% of our revenue is donated to a recognised public-interest association selected for its tangible contributions to health, education, environment, or inclusion.',
+    'engagement.sections.pasteur.title': '2025 commitment – Institut Pasteur',
+    'engagement.sections.pasteur.body': 'For 2025, we support Institut Pasteur, a major player in medical research and the fight against cancer. This illustrates our drive to put innovation and technology at the service of life.',
+
     'theme.toLight': 'Switch to light mode',
     'theme.toDark': 'Switch to dark mode',
     'theme.lightLabel': 'Light mode',
     'theme.darkLabel': 'Dark mode',
 
     'footer.made': 'SEAGLE - Visual AI crafted in France.',
+    'footer.charter': 'Engagement charter',
     'footer.back': 'Back to top',
     'footer.copy': 'All rights reserved',
 

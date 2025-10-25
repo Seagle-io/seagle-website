@@ -895,6 +895,62 @@ section{ scroll-margin-top:80px }
   line-height:1.7;
 }
 
+/* ENGAGEMENT PAGE */
+.engagement-hero{
+  position:relative;
+  z-index:1;
+  padding:120px 20px 60px;
+  text-align:center;
+}
+.engagement-hero-inner{
+  max-width:720px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+.engagement-hero h1{
+  margin:0;
+  font-size:clamp(30px, 5vw, 52px);
+}
+.engagement-grid{
+  position:relative;
+  z-index:1;
+  padding:60px 20px 80px;
+}
+.engagement-grid-inner{
+  max-width:960px;
+  margin:0 auto;
+  display:grid;
+  gap:24px;
+}
+.engagement-card{
+  border-radius:22px;
+  padding:26px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  box-shadow:0 18px 38px rgba(5,14,26,0.28);
+}
+.engagement-card h2{
+  margin:0 0 12px;
+  font-size:22px;
+}
+.engagement-card p{
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.7;
+}
+.engagement-card a{
+  color:var(--accent-2);
+  text-decoration:none;
+}
+.engagement-card a:hover,
+.engagement-card a:focus-visible{
+  text-decoration:underline;
+  outline:none;
+}
+
 /* BRANDING */
 .branding .section-inner{
   display:grid;
@@ -1161,6 +1217,9 @@ section{ scroll-margin-top:80px }
   .security-grid{ padding:40px 16px 30px }
   .security-card{ padding:22px }
   .security-grid-inner{ gap:20px }
+  .engagement-grid{ padding:40px 16px 60px }
+  .engagement-card{ padding:22px }
+  .engagement-grid-inner{ gap:20px }
 }
 
 @media (prefers-reduced-motion: reduce){

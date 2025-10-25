@@ -4,6 +4,7 @@ import App from './App.jsx'
 import { I18nProvider } from './i18n.jsx'
 import Products from './pages/Products.jsx'
 import SecuriteSouverainete from './pages/SecuriteSouverainete.jsx'
+import CharteEngagement from './pages/CharteEngagement.jsx'
 import './styles.css'
 
 const root = createRoot(document.getElementById('root'))
@@ -26,6 +27,7 @@ function Root() {
   const CurrentPage = (() => {
     if (path.startsWith('/produits')) return Products
     if (path.startsWith('/securite-souverainete')) return SecuriteSouverainete
+    if (path.startsWith('/charte-engagement')) return CharteEngagement
     return App
   })()
 
