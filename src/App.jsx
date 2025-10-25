@@ -17,18 +17,83 @@ export default function App() {
         <Hero />
         <section id="product" className="product">
           <div className="product-inner">
-            <h2>{t('product.title')}</h2>
-            <p className="lead">{t('product.lead')}</p>
-            <div className="features">
-              <div className="card">
+            <div className="product-header">
+              <span className="product-pill">{t('product.pill')}</span>
+              <h2>{t('product.title')}</h2>
+              <p className="lead">{t('product.lead')}</p>
+            </div>
+
+            <div className="product-grid">
+              <article className="product-showcase">
+                <h3>{t('product.overview.title')}</h3>
+                <p>{t('product.overview.desc')}</p>
+                <ul className="product-steps">
+                  <li>
+                    <span className="step-index">1</span>
+                    <div>
+                      <h4>{t('product.flow1.title')}</h4>
+                      <p>{t('product.flow1.desc')}</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span className="step-index">2</span>
+                    <div>
+                      <h4>{t('product.flow2.title')}</h4>
+                      <p>{t('product.flow2.desc')}</p>
+                    </div>
+                  </li>
+                  <li>
+                    <span className="step-index">3</span>
+                    <div>
+                      <h4>{t('product.flow3.title')}</h4>
+                      <p>{t('product.flow3.desc')}</p>
+                    </div>
+                  </li>
+                </ul>
+              </article>
+
+              <aside className="product-aside">
+                <div className="product-metrics">
+                  <div className="metric accent">
+                    <span className="metric-value">{t('product.metric1.value')}</span>
+                    <span className="metric-label">{t('product.metric1.label')}</span>
+                  </div>
+                  <div className="metric">
+                    <span className="metric-value">{t('product.metric2.value')}</span>
+                    <span className="metric-label">{t('product.metric2.label')}</span>
+                  </div>
+                  <div className="metric">
+                    <span className="metric-value">{t('product.metric3.value')}</span>
+                    <span className="metric-label">{t('product.metric3.label')}</span>
+                  </div>
+                </div>
+                <div className="product-side-card highlight">
+                  <h3>{t('product.b1.title')}</h3>
+                  <p>{t('product.b1.desc')}</p>
+                </div>
+                <div className="product-side-split">
+                  <div className="product-side-card">
+                    <h3>{t('product.b2.title')}</h3>
+                    <p>{t('product.b2.desc')}</p>
+                  </div>
+                  <div className="product-side-card">
+                    <h3>{t('product.b3.title')}</h3>
+                    <p>{t('product.b3.desc')}</p>
+                  </div>
+                </div>
+              </aside>
+            </div>
+
+            <div className="product-features">
+              <div className="feature-card">
                 <h3>{t('product.f1.title')}</h3>
                 <p>{t('product.f1.desc')}</p>
               </div>
-              <div className="card">
+              <div className="feature-card">
                 <h3>{t('product.f2.title')}</h3>
                 <p>{t('product.f2.desc')}</p>
               </div>
-              <div className="card">
+              <div className="feature-card">
                 <h3>{t('product.f3.title')}</h3>
                 <p>{t('product.f3.desc')}</p>
               </div>
