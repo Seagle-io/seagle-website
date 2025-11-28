@@ -10,7 +10,7 @@ export default function Footer() {
         <nav className="flex gap-5 text-sm text-muted justify-center" aria-label="Liens légaux">
           <a href="#" className="hover:text-text transition-colors">{t('footer.legal')}</a>
           <a href="#" className="hover:text-text transition-colors">{t('footer.privacy')}</a>
-          <a href="mailto:contact@seagle.io" className="hover:text-text transition-colors">contact@seagle.io</a>
+          <a href="mailto:contact@seagle.fr" className="hover:text-text transition-colors">contact@seagle.fr</a>
         </nav>
         <div className="text-xs text-[rgba(255,255,255,0.4)]">
           &copy; {new Date().getFullYear()} SEAGLE. {t('footer.rights')}

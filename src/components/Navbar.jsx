@@ -91,9 +91,22 @@ export default function Navbar({ navigate, currentPage = 'home' }) {
           className={`flex items-center gap-[18px] max-[900px]:absolute max-[900px]:top-[72px] max-[900px]:right-6 max-[900px]:left-6 max-[900px]:flex-col max-[900px]:items-stretch max-[900px]:p-5 max-[900px]:rounded-[20px] max-[900px]:bg-surface-strong max-[900px]:border max-[900px]:border-border max-[900px]:shadow-shadow ${open ? 'max-[900px]:flex' : 'max-[900px]:hidden'}`}
           role="menu"
         >
-          <a href="#demo" className="px-4 py-2.5 rounded-full bg-[linear-gradient(120deg,var(--accent),var(--accent-2))] text-[#053640] font-bold no-underline shadow-[0_12px_28px_rgba(24,184,196,0.28)]" onClick={(e) => handleAnchorClick(e, 'demo')}>
-            {t('hero.cta')}
+          <a href="#expertise" className="px-3 py-2 text-sm font-medium text-text hover:text-accent transition-colors" onClick={(e) => handleAnchorClick(e, 'expertise')}>
+            {t('navbar.expertise')}
           </a>
+          <a href="#about" className="px-3 py-2 text-sm font-medium text-text hover:text-accent transition-colors" onClick={(e) => handleAnchorClick(e, 'about')}>
+            {t('navbar.about')}
+          </a>
+          <a href="#contact" className="px-3 py-2 text-sm font-medium text-text hover:text-accent transition-colors" onClick={(e) => handleAnchorClick(e, 'contact')}>
+            {t('navbar.contact')}
+          </a>
+          <button
+            type="button"
+            className="px-3 py-2 text-sm font-medium text-text hover:text-accent transition-colors uppercase"
+            onClick={() => setLang(lang === 'fr' ? 'en' : 'fr')}
+          >
+            {t('navbar.lang')}
+          </button>
         </div>
       </div>
     </nav>
