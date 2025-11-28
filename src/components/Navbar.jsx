@@ -10,8 +10,10 @@ export default function Navbar({ navigate, currentPage = 'home' }) {
   const menuId = 'primary-nav'
 
   const anchorLinks = [
-    { key: 'hero', hash: 'hero', label: t('navbar.hero') },
-    { key: 'features', hash: 'features', label: t('navbar.features') },
+    { key: 'solutions', hash: 'solutions', label: t('navbar.solutions') },
+    { key: 'industries', hash: 'industries', label: t('navbar.industries') },
+    { key: 'tech', hash: 'tech', label: t('navbar.technology') },
+    { key: 'resources', hash: 'resources', label: t('navbar.resources') },
     { key: 'contact', hash: 'contact', label: t('navbar.contact') },
   ]
 
@@ -20,7 +22,7 @@ export default function Navbar({ navigate, currentPage = 'home' }) {
     const firstFocusable = menuRef.current?.querySelector('a,button')
     firstFocusable?.focus()
 
-    function onKey(e){
+    function onKey(e) {
       if (e.key === 'Escape') {
         setOpen(false)
         buttonRef.current?.focus()
@@ -28,10 +30,10 @@ export default function Navbar({ navigate, currentPage = 'home' }) {
         const focusables = Array.from(menuRef.current?.querySelectorAll('a,button') || [])
         if (focusables.length === 0) return
         const idx = focusables.indexOf(document.activeElement)
-        if (e.shiftKey && (idx <= 0)){
+        if (e.shiftKey && (idx <= 0)) {
           e.preventDefault()
-          focusables[focusables.length-1].focus()
-        } else if (!e.shiftKey && (idx === focusables.length-1)){
+          focusables[focusables.length - 1].focus()
+        } else if (!e.shiftKey && (idx === focusables.length - 1)) {
           e.preventDefault()
           focusables[0].focus()
         }
@@ -45,11 +47,11 @@ export default function Navbar({ navigate, currentPage = 'home' }) {
     }
   }, [open])
 
-  function handleAnchorClick(e, hash){
+  function handleAnchorClick(e, hash) {
     e.preventDefault()
     setOpen(false)
     const target = document.getElementById(hash)
-    if (target){
+    if (target) {
       requestAnimationFrame(() => target.scrollIntoView({ behavior: 'smooth', block: 'start' }))
       return
     }
@@ -59,14 +61,14 @@ export default function Navbar({ navigate, currentPage = 'home' }) {
       homeTarget?.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, 80)
   }
-  function handleBrandClick(e){
+  function handleBrandClick(e) {
     if (currentPage === 'home') return
     e.preventDefault()
     setOpen(false)
     navigate?.('/')
   }
 
-  function goToProducts(e){
+  function goToProducts(e) {
     e.preventDefault()
     setOpen(false)
     navigate?.('/produits')

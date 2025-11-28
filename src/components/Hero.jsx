@@ -1,6 +1,5 @@
 import React from 'react'
 import { useI18n } from '../i18n.jsx'
-import FlowFieldParticles from './FlowFieldParticles.jsx'
 
 export default function Hero({ navigate }) {
   const { t } = useI18n()
@@ -16,28 +15,27 @@ export default function Hero({ navigate }) {
             <h1 className="hero-title">{t('hero.title')}</h1>
             <p className="lead">{t('hero.subtitle')}</p>
             <div className="hero-cta">
-              <a className="btn primary pulse" href="#demo">{t('hero.cta')}</a>
+              <a className="btn primary pulse" href="#contact">{t('hero.cta')}</a>
               <button
                 type="button"
                 className="btn outline"
-                onClick={() => navigate?.('/produits')}
+                onClick={() => navigate?.('/contact')}
               >
                 {t('hero.secondary')}
               </button>
             </div>
-          </div>
-          <div className="hero-visual" aria-hidden="true">
-            <FlowFieldParticles />
-            <div className="hero-orbit">
-              <div className="hero-orbit-ring" />
-              <div className="hero-orbit-glow" />
-              <div className="hero-orbit-card primary">
-                <strong>{t('hero.card1.title')}</strong>
-                <p>{t('hero.card1.desc')}</p>
+            <div className="reassurance-list" style={{ marginTop: '40px', gridTemplateColumns: 'repeat(3, auto)', gap: '20px', justifyContent: 'start' }}>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <strong style={{ color: 'var(--accent-2)', fontSize: '18px' }}>+500</strong>
+                <span style={{ fontSize: '12px', color: 'var(--muted)', textTransform: 'uppercase' }}>Clients</span>
               </div>
-              <div className="hero-orbit-card secondary">
-                <strong>{t('hero.card2.title')}</strong>
-                <p>{t('hero.card2.desc')}</p>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <strong style={{ color: 'var(--accent-2)', fontSize: '18px' }}>3</strong>
+                <span style={{ fontSize: '12px', color: 'var(--muted)', textTransform: 'uppercase' }}>Continents</span>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <strong style={{ color: 'var(--accent-2)', fontSize: '18px' }}>24/7</strong>
+                <span style={{ fontSize: '12px', color: 'var(--muted)', textTransform: 'uppercase' }}>Support</span>
               </div>
             </div>
           </div>
