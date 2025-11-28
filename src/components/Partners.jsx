@@ -18,14 +18,14 @@ export default function Partners() {
     const allPartners = [...partners, ...partners]
 
     return (
-        <section className="partners-section" aria-label={t('partners.label')}>
-            <div className="partners-container">
-                <p className="partners-label">{t('partners.title')}</p>
-                <div className="marquee-wrapper">
-                    <div className="marquee-content">
+        <section className="py-10 bg-[rgba(10,30,63,0.3)] border-b border-border overflow-hidden relative z-10" aria-label={t('partners.label')}>
+            <div className="max-w-[1200px] mx-auto text-center">
+                <p className="text-sm uppercase tracking-[0.1em] text-muted mb-6">{t('partners.title')}</p>
+                <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+                    <div className="flex gap-[60px] w-max animate-scroll">
                         {allPartners.map((p, i) => (
-                            <div key={i} className="partner-logo">
-                                <img src={p.logo} alt={p.name} loading="lazy" />
+                            <div key={i} className="flex items-center justify-center h-10 opacity-60 transition-opacity duration-300 hover:opacity-100">
+                                <img src={p.logo} alt={p.name} loading="lazy" className="h-full w-auto max-w-[120px] filter grayscale brightness-200" />
                             </div>
                         ))}
                     </div>

@@ -9,14 +9,6 @@ export default function Navbar({ navigate, currentPage = 'home' }) {
   const buttonRef = useRef(null)
   const menuId = 'primary-nav'
 
-  const anchorLinks = [
-    { key: 'solutions', hash: 'solutions', label: t('navbar.solutions') },
-    { key: 'industries', hash: 'industries', label: t('navbar.industries') },
-    { key: 'tech', hash: 'tech', label: t('navbar.technology') },
-    { key: 'resources', hash: 'resources', label: t('navbar.resources') },
-    { key: 'contact', hash: 'contact', label: t('navbar.contact') },
-  ]
-
   useEffect(() => {
     if (!open) return
     const firstFocusable = menuRef.current?.querySelector('a,button')
@@ -75,57 +67,31 @@ export default function Navbar({ navigate, currentPage = 'home' }) {
   }
 
   return (
-    <nav className="navbar" aria-label="Navigation principale">
-      <div className="nav-inner">
-        <a href="/" className="brand" aria-label="Seagle - Accueil" onClick={handleBrandClick}>
-          <span className="brand-logo" aria-hidden="true" />
+    <nav className="sticky top-0 z-20 backdrop-blur-[12px] bg-[linear-gradient(90deg,rgba(10,30,63,0.72),rgba(10,30,63,0.35))] border-b border-border [html[data-theme=light]_&]:bg-[linear-gradient(90deg,rgba(255,255,255,0.94),rgba(236,244,255,0.8))] [html[data-theme=light]_&]:border-[rgba(12,52,72,0.08)] [html[data-theme=light]_&]:shadow-[0_6px_20px_rgba(12,32,52,0.08)]" aria-label="Navigation principale">
+      <div className="max-w-[1200px] mx-auto px-6 py-3.5 flex items-center justify-between gap-[18px]">
+        <a href="/" className="inline-flex items-center gap-2.5 font-extrabold tracking-[0.08em] no-underline" aria-label="Seagle - Accueil" onClick={handleBrandClick}>
+          <span className="w-10 h-10 bg-[url('/models/favicon.png')] bg-contain bg-center bg-no-repeat" aria-hidden="true" />
           <strong>SEAGLE</strong>
         </a>
         <button
           ref={buttonRef}
-          className="burger"
+          className="hidden max-[900px]:block w-[42px] h-[42px] rounded-xl border border-[rgba(255,255,255,0.1)] bg-transparent cursor-pointer"
           aria-label="Menu"
           aria-expanded={open}
           aria-controls={menuId}
           onClick={() => setOpen(v => !v)}
         >
-          <span />
-          <span />
-          <span />
+          <span className="block h-0.5 my-[7px] mx-auto w-[22px] bg-text transition-transform duration-300" />
+          <span className="block h-0.5 my-[7px] mx-auto w-[22px] bg-text transition-transform duration-300" />
+          <span className="block h-0.5 my-[7px] mx-auto w-[22px] bg-text transition-transform duration-300" />
         </button>
         <div
           id={menuId}
           ref={menuRef}
-          className={`links ${open ? 'open' : ''}`}
+          className={`flex items-center gap-[18px] max-[900px]:absolute max-[900px]:top-[72px] max-[900px]:right-6 max-[900px]:left-6 max-[900px]:flex-col max-[900px]:items-stretch max-[900px]:p-5 max-[900px]:rounded-[20px] max-[900px]:bg-surface-strong max-[900px]:border max-[900px]:border-border max-[900px]:shadow-shadow ${open ? 'max-[900px]:flex' : 'max-[900px]:hidden'}`}
           role="menu"
         >
-          {anchorLinks.map(link => (
-            <a
-              key={link.key}
-              href={currentPage === 'home' ? `#${link.hash}` : `/#${link.hash}`}
-              onClick={(e) => handleAnchorClick(e, link.hash)}
-            >
-              {link.label}
-            </a>
-          ))}
-          <a
-            href="/produits"
-            onClick={goToProducts}
-            aria-current={currentPage === 'products' ? 'page' : undefined}
-          >
-            {t('navbar.products')}
-          </a>
-          <ThemeSwitcher />
-          <button
-            className="lang-switch"
-            onClick={(e) => {
-              e.stopPropagation()
-              setLang(lang === 'fr' ? 'en' : 'fr')
-            }}
-          >
-            {t('navbar.lang')}
-          </button>
-          <a href="#demo" className="cta-small" onClick={(e) => handleAnchorClick(e, 'demo')}>
+          <a href="#demo" className="px-4 py-2.5 rounded-full bg-[linear-gradient(120deg,var(--accent),var(--accent-2))] text-[#053640] font-bold no-underline shadow-[0_12px_28px_rgba(24,184,196,0.28)]" onClick={(e) => handleAnchorClick(e, 'demo')}>
             {t('hero.cta')}
           </a>
         </div>

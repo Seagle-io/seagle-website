@@ -42,27 +42,27 @@ export default function ContactForm() {
   }
 
   return (
-    <form className="contact-form" onSubmit={onSubmit}>
-        <div className="form-row">
-          <label>{t('contact.name')}</label>
-          <input type="text" value={name} onChange={e=>setName(e.target.value)} placeholder={t('contact.namePh')} required />
-        </div>
-        <div className="form-row">
-          <label>{t('contact.email')}</label>
-          <input type="email" value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@company.com" required />
-        </div>
-        <div className="form-row">
-          <label>{t('contact.subject')}</label>
-          <input type="text" value={subject} onChange={e=>setSubject(e.target.value)} placeholder={t('contact.subjectPh')} />
-        </div>
-        <div className="form-row">
-          <label>{t('contact.message')}</label>
-          <textarea className="prompt" value={message} onChange={e=>setMessage(e.target.value)} placeholder={t('contact.messagePh')} rows={6} required />
-        </div>
-        <div className="form-actions">
-          <button className="primary" disabled={!isValid}>{t('contact.send')}</button>
-        </div>
-        {status ? <div className="hint" aria-live="polite">{status}</div> : null}
+    <form className="grid gap-3.5" onSubmit={onSubmit}>
+      <div className="grid gap-1.5">
+        <label className="text-sm font-semibold text-text">{t('contact.name')}</label>
+        <input className="w-full rounded-xl border border-border bg-surface-soft text-text px-3.5 py-3 font-sans text-[15px] transition-colors duration-300 focus:outline-none focus:border-accent focus:ring-[3px] focus:ring-[rgba(24,184,196,0.18)]" type="text" value={name} onChange={e => setName(e.target.value)} placeholder={t('contact.namePh')} required />
+      </div>
+      <div className="grid gap-1.5">
+        <label className="text-sm font-semibold text-text">{t('contact.email')}</label>
+        <input className="w-full rounded-xl border border-border bg-surface-soft text-text px-3.5 py-3 font-sans text-[15px] transition-colors duration-300 focus:outline-none focus:border-accent focus:ring-[3px] focus:ring-[rgba(24,184,196,0.18)]" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@company.com" required />
+      </div>
+      <div className="grid gap-1.5">
+        <label className="text-sm font-semibold text-text">{t('contact.subject')}</label>
+        <input className="w-full rounded-xl border border-border bg-surface-soft text-text px-3.5 py-3 font-sans text-[15px] transition-colors duration-300 focus:outline-none focus:border-accent focus:ring-[3px] focus:ring-[rgba(24,184,196,0.18)]" type="text" value={subject} onChange={e => setSubject(e.target.value)} placeholder={t('contact.subjectPh')} />
+      </div>
+      <div className="grid gap-1.5">
+        <label className="text-sm font-semibold text-text">{t('contact.message')}</label>
+        <textarea className="w-full rounded-xl border border-border bg-surface-soft text-text px-3.5 py-3 font-sans text-[15px] transition-colors duration-300 focus:outline-none focus:border-accent focus:ring-[3px] focus:ring-[rgba(24,184,196,0.18)] resize-y max-w-full" value={message} onChange={e => setMessage(e.target.value)} placeholder={t('contact.messagePh')} rows={6} required />
+      </div>
+      <div className="flex justify-end">
+        <button className="no-underline px-[22px] py-[14px] rounded-[14px] font-semibold inline-flex items-center gap-2 border border-transparent transition-all duration-250 ease-out bg-[linear-gradient(130deg,var(--accent),var(--accent-2))] text-[#043640] shadow-[0_18px_36px_rgba(24,184,196,0.28)] hover:-translate-y-[2px] hover:brightness-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled={!isValid}>{t('contact.send')}</button>
+      </div>
+      {status ? <div className="text-muted text-[13px]" aria-live="polite">{status}</div> : null}
     </form>
   )
 }

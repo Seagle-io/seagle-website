@@ -47,13 +47,13 @@ export default function ThemeSwitcher({ minimal = false, onToggle }) {
   return (
     <button
       type="button"
-      className={`theme-switch ${minimal ? 'minimal' : ''}`}
+      className={`inline-flex items-center gap-2.5 px-2.5 py-1.5 rounded-full bg-surface border border-border cursor-pointer text-text relative transition-all duration-300 ease-out hover:border-accent ${minimal ? 'p-1.5 bg-surface-strong rounded-[14px]' : ''}`}
       aria-label={theme === DARK ? t('theme.toLight') : t('theme.toDark')}
       onClick={toggleTheme}
     >
-      <span className="switch-thumb" />
+      <span className="w-5 h-5 rounded-full bg-[linear-gradient(135deg,var(--accent),var(--accent-2))] shadow-[0_4px_12px_rgba(24,184,196,0.35)]" />
       {!minimal && (
-        <span className="switch-label">
+        <span className="text-sm font-semibold">
           {theme === DARK ? t('theme.lightLabel') : t('theme.darkLabel')}
         </span>
       )}

@@ -52,20 +52,20 @@ export default function ReassuranceRibbon() {
   }
 
   return (
-    <section className="reassurance" aria-label={t('reassurance.aria')}>
-      <div className="reassurance-inner">
-        <ul className="reassurance-list">
+    <section className="z-10 pt-8 px-4 pb-0" aria-label={t('reassurance.aria')}>
+      <div className="max-w-[1160px] mx-auto">
+        <ul className="list-none m-0 p-0 grid gap-3 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
           {items.map((item) => (
-            <li key={item.key} className="reassurance-item">
+            <li key={item.key} className="relative">
               <a
                 href={item.href}
                 onClick={(e) => handleClick(e, item)}
-                className="reassurance-link"
+                className="flex items-center gap-3.5 px-[18px] py-4 rounded-[18px] no-underline text-text bg-[rgba(6,18,33,0.72)] border border-[rgba(24,184,196,0.22)] transition-all duration-300 shadow-[0_18px_36px_rgba(5,14,26,0.28)] min-h-[112px] hover:border-[rgba(24,184,196,0.45)] hover:-translate-y-[2px] hover:shadow-[0_22px_44px_rgba(5,14,26,0.32)] focus-visible:outline-none focus-visible:border-[rgba(24,184,196,0.45)] focus-visible:-translate-y-[2px] focus-visible:shadow-[0_22px_44px_rgba(5,14,26,0.32)] [html[data-theme=light]_&]:text-[#05202a] [html[data-theme=light]_&]:bg-[rgba(255,255,255,0.96)] [html[data-theme=light]_&]:border-[rgba(12,52,72,0.12)] [html[data-theme=light]_&]:shadow-[0_16px_34px_rgba(5,14,26,0.18)] [html[data-theme=light]_&]:hover:shadow-[0_24px_46px_rgba(5,14,26,0.22)]"
               >
-                <span className="reassurance-icon" aria-hidden="true">{item.icon}</span>
-                <span className="reassurance-text">
-                  <strong>{t(`reassurance.${item.key}.title`)}</strong>
-                  <span>{t(`reassurance.${item.key}.desc`)}</span>
+                <span className="text-xl" aria-hidden="true">{item.icon}</span>
+                <span className="flex flex-col gap-1">
+                  <strong className="text-[15px] tracking-[0.04em] uppercase text-accent-2 [html[data-theme=light]_&]:text-accent">{t(`reassurance.${item.key}.title`)}</strong>
+                  <span className="text-sm text-muted [html[data-theme=light]_&]:text-[rgba(5,32,42,0.72)]">{t(`reassurance.${item.key}.desc`)}</span>
                 </span>
               </a>
             </li>
