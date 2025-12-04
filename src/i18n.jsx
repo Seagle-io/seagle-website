@@ -13,6 +13,9 @@ const dict = {
     'navbar.trust1': 'Solution 100 % française',
     'navbar.trust2': 'Données hébergées en France',
     'navbar.trust3': 'Sécurité quantum proof',
+    'navbar.expertise': 'Expertise',
+    'navbar.offers': 'Nos offres',
+    'navbar.about': 'À propos',
 
     'hero.tagline': 'Seagle - technologie fluide et expérience humaine.',
     'hero.title': 'Sofia - l\'assistant IA qui guide vos utilisateurs pas à pas.',
@@ -222,6 +225,9 @@ const dict = {
     'navbar.trust1': '100% French solution',
     'navbar.trust2': 'Data hosted in France',
     'navbar.trust3': 'Quantum-proof security',
+    'navbar.expertise': 'Expertise',
+    'navbar.offers': 'Offers',
+    'navbar.about': 'About',
 
     'hero.tagline': 'Seagle - fluid technology, human experience.',
     'hero.title': 'Sofia - the AI assistant that guides every step.',

@@ -1,6 +1,8 @@
-import Home from "./Home";
+import Home from "./Home"
+import Navbar from "./Navbar"
 
 const fr = {
-  Home
+	Home,
+	navbar: Navbar,
 }
 export default fr

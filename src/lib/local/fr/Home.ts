@@ -1,4 +1,4 @@
 const Home = {
-  title: "Bonjour"
+	title: "Bonjour"
 }
 export default Home
