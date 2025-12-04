@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
-import Navbar from '../components/Navbar.jsx'
-import Footer from '../components/Footer.jsx'
-import BackgroundWave from '../components/BackgroundWave.jsx'
-import FlowFieldParticles from '../components/FlowFieldParticles.jsx'
-import ReassuranceRibbon from '../components/ReassuranceRibbon.jsx'
-import { useI18n } from '../i18n.jsx'
+import Navbar from '../../components/Navbar.jsx'
+import Footer from '../../components/Footer.jsx'
+import BackgroundWave from '../../components/BackgroundWave.jsx'
+import FlowFieldParticles from '../../components/FlowFieldParticles.jsx'
+import ReassuranceRibbon from '../../components/ReassuranceRibbon.jsx'
+import { useI18n } from '../../i18n.jsx'
 
 const sections = [
   {

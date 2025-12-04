@@ -1,6 +1,6 @@
 import React from 'react'
-import { useI18n } from '../i18n.jsx'
-import FlowFieldParticles from './FlowFieldParticles.jsx'
+import { useI18n } from '../../i18n.jsx'
+import FlowFieldParticles from '../FlowFieldParticles.jsx'
 
 export default function Hero({ navigate }) {
   const { t } = useI18n()

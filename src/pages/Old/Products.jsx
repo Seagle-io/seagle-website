@@ -1,11 +1,11 @@
 import React from 'react'
-import Navbar from '../components/Navbar.jsx'
-import Footer from '../components/Footer.jsx'
-import BackgroundWave from '../components/BackgroundWave.jsx'
-import FlowFieldParticles from '../components/FlowFieldParticles.jsx'
-import ContactForm from '../components/ContactForm.jsx'
-import ReassuranceRibbon from '../components/ReassuranceRibbon.jsx'
-import { useI18n } from '../i18n.jsx'
+import Navbar from '../../components/Navbar.jsx'
+import Footer from '../../components/Footer.jsx'
+import BackgroundWave from '../../components/BackgroundWave.jsx'
+import FlowFieldParticles from '../../components/FlowFieldParticles.jsx'
+import ContactForm from '../../components/ContactForm.jsx'
+import ReassuranceRibbon from '../../components/ReassuranceRibbon.jsx'
+import { useI18n } from '../../i18n.jsx'
 
 export default function Products({ navigate }) {
   const { t } = useI18n()

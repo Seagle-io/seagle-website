@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useI18n } from '../i18n.jsx'
+import { useI18n } from '../../i18n.jsx'
 
 const STORAGE_KEY = 'seagle-theme'
 const LIGHT = 'light'

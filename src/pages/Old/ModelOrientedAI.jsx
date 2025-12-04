@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import { useI18n } from '../i18n.jsx'
+import { useI18n } from '../../i18n.jsx'
 import { z } from 'zod'
 
 const DEFAULT_MODEL = {

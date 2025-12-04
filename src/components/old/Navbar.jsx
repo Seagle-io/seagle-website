@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useI18n } from '../i18n.jsx'
+import { useI18n } from '../../i18n.jsx'
 import ThemeSwitcher from './ThemeSwitcher.jsx'
 
 export default function Navbar({ navigate, currentPage = 'home' }) {

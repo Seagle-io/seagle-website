@@ -1,5 +1,5 @@
 import React from 'react'
-import { useI18n } from '../i18n.jsx'
+import { useI18n } from '../../i18n.jsx'
 
 const items = [
   { key: 'french', icon: '🇫🇷', href: '/securite-souverainete#solution-francaise', event: 'footer_reassurance_french' },
