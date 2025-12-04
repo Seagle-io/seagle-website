@@ -1,3 +1,4 @@
+import { cva } from 'class-variance-authority'
 import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 
@@ -5,9 +6,10 @@ type FlowFieldParticlesProps = {
 	fullscreen: boolean
 	particlesColor?: string
 	flowPercent?: number
+	radius?: number
 }
 
-export default function FlowFieldParticles({ fullscreen = false, particlesColor, flowPercent = 33.3 }: FlowFieldParticlesProps){
+export default function FlowFieldParticles({ fullscreen = false, particlesColor, flowPercent = 33.3, radius = 5 }: FlowFieldParticlesProps){
 	const wrapRef = useRef(null)
 	const canvasRef = useRef(null)
 	const rafRef = useRef(0)
@@ -51,7 +53,7 @@ export default function FlowFieldParticles({ fullscreen = false, particlesColor,
 		const BASE = 1280 * 720
 		const norm = Math.max(0.6, Math.min(2.5, (WIDTH * HEIGHT) / BASE))
 		const COUNT = Math.floor(2800 * Math.sqrt(norm))
-		const RADIUS = 3.6
+		const RADIUS = radius
 		const FREQ = 0.35
 		const clampedFlowPercent = Math.max(0, Math.min(100, flowPercent))
 		const FLOW = Math.round(clampedFlowPercent * 0.3) / 10
@@ -201,9 +203,29 @@ export default function FlowFieldParticles({ fullscreen = false, particlesColor,
 		}
 	}, [])
 
+	const wrapperClass = cva('', {
+		variants: {
+			fullscreen: {
+				true: 'w-full h-full fixed inset-0 z-0 pointer-events-none',
+				false: 'absolute -inset-5 pointer-events-none',
+			},
+		},
+		defaultVariants: { fullscreen: false },
+	})
+
+	const canvasClass = cva('block opacity-[var(--opacity-particle)] filter blur-[var(--blur-particle)]', {
+		variants: {
+			fullscreen: {
+				true: 'w-screen h-screen',
+				false: 'w-full h-full',
+			},
+		},
+		defaultVariants: { fullscreen: false },
+	})
+
 	return (
-		<div ref={wrapRef} className={fullscreen ? 'flow-bg' : 'eagle-overlay'}>
-			<canvas ref={canvasRef} className={fullscreen ? 'flow-canvas' : 'eagle-canvas'} />
+		<div ref={wrapRef} className={wrapperClass({ fullscreen })}>
+			<canvas ref={canvasRef} className={canvasClass({ fullscreen })} />
 		</div>
 	)
 }

@@ -11,6 +11,8 @@
   prefersdark: false;
   color-scheme: "light";
   --particle-color:  oklch(12% 0.042 264.695);
+  --opacity-particle: 0.65;
+  --blur-particle: 2px;
   --color-base-100: oklch(12% 0.042 264.695);
   --color-base-200: oklch(12% 0.042 264.695);
   --color-base-300: oklch(12% 0.042 264.695);

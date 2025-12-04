@@ -30,6 +30,19 @@ This repository contains a minimal React single page that demonstrates a "model�
 - `npm run build` — Production build to `dist/`
 - `npm run preview` — Preview the production build
 
+## IDE / Tailwind IntelliSense
+
+Pour bénéficier de l’autocomplétion Tailwind y compris dans les blocs `cva(...)`, ajoutez la configuration suivante dans votre éditeur (exemple VS Code) :
+
+- Créez `.vscode/settings.json` avec :
+  ```json
+  {
+    "tailwindCSS.experimental.classRegex": [
+      ["cva\\(([^)]*)\\)", "(?:['\"`]([^'\"`]*?)['\"`])"]
+    ]
+  }
+  ```
+
 ## Déploiement GitHub Pages
 
 Un workflow est prêt: `.github/workflows/deploy.yml`.
