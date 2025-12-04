@@ -3,6 +3,6 @@ import Navbar from "./Navbar"
 
 const en = {
 	Home,
-	Navbar,
+	navbar: Navbar,
 }
 export default en

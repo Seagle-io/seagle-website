@@ -27,16 +27,20 @@ export default function Header(){
 	const location = useLocation()
 	const [open, setOpen] = useState(false)
 	const [scrolled, setScrolled] = useState(false)
+	const normalizedLanguage = i18n.language.startsWith("fr") ? "fr" : "en"
 
 	const currentPath = location?.pathname ?? "/"
 	const toggle = () => setOpen(prev => !prev)
 	const close = () => setOpen(false)
-	const switchLang = () => {
-		const next = i18n.language === "fr" ? "en" : "fr"
-		void i18n.changeLanguage(next)
+	const setLanguage = (code: string) => {
+		if (i18n.language.startsWith(code)) {
+			setOpen(false)
+			return
+		}
+		void i18n.changeLanguage(code)
 		setOpen(false)
 	}
-	const langLabel = i18n.language === "fr" ? "EN" : "FR"
+	const toggleLanguage = () => setLanguage(normalizedLanguage === "fr" ? "en" : "fr")
 
 	useEffect(() => {
 		const onScroll = () => setScrolled(window.scrollY > 6)
@@ -57,26 +61,25 @@ export default function Header(){
 
 				<nav className={`absolute left-0 right-0 top-[72px] flex flex-col gap-4 bg-black/90 px-6 pb-6 pt-4 transition-all duration-200 lg:static lg:flex lg:flex-row lg:items-center lg:gap-6 lg:bg-transparent lg:p-0 ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0 lg:pointer-events-auto lg:opacity-100"}`}>
 					{links.map(link => (
-						<>
-							<a
-								
-								href={link.href}
-								className={navLink({ active: currentPath === link.href })}
-								onClick={close}
-							>
-								{t(link.key)}
-							</a>
-						</>
+						<a
+							key={link.key}
+							href={link.href}
+							className={navLink({ active: currentPath === link.href })}
+							onClick={close}
+						>
+							{t(link.key)}
+						</a>
 					))}
-
-					<button
-						type="button"
-						onClick={switchLang}
-						// className="ml-0 inline-flex items-center justify-center rounded-full border border-white/20 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-white transition hover:border-white/40 hover:bg-white/10 lg:ml-2"
-						className="btn btn-xs btn-neutral"
-					>
-						{langLabel}
-					</button>
+					<div className="flex gap-2 lg:ml-2">
+						<button
+							type="button"
+							onClick={toggleLanguage}
+							className="btn btn-xs btn-neutral"
+							aria-pressed={normalizedLanguage === "fr"}
+						>
+							{normalizedLanguage === "fr" ? "FR" : "EN"}
+						</button>
+					</div>
 				</nav>
 			</div>
 		</header>
