@@ -50,7 +50,7 @@ export default function Header(){
 	}, [])
 
 	return (
-		<header className={`sticky top-0 z-20 border-b transition-all duration-300 ${scrolled ? "border-white/15 bg-black/80 backdrop-blur supports-[backdrop-filter]:bg-black/70" : "border-transparent bg-black/30 backdrop-blur supports-[backdrop-filter]:bg-black/20"}`}>
+		<header className={`sticky top-0 z-20 border-b transition-all duration-300 ${scrolled ? "bg-black/80 backdrop-blur supports-backdrop-filter:bg-black/70" : "border-transparent bg-black/30 backdrop-blur supports-backdrop-filter:bg-black/20"}`}>
 			<div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
 				<a href="/" className="flex items-center gap-3" onClick={close}>
 					<div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/30">
