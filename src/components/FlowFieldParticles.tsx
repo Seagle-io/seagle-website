@@ -10,7 +10,7 @@ type FlowFieldParticlesProps = {
 	size?: number
 }
 
-export default function FlowFieldParticles({ fullscreen = false, flowPercent = 20, radius = 3.8, size = 0.03 }: FlowFieldParticlesProps){
+export default function FlowFieldParticles({ fullscreen = false, flowPercent = 60, radius = 3.8, size = 0.04 }: FlowFieldParticlesProps){
 	const wrapRef = useRef(null)
 	const canvasRef = useRef(null)
 	const rafRef = useRef(0)
@@ -27,10 +27,11 @@ export default function FlowFieldParticles({ fullscreen = false, flowPercent = 2
 		const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)')
 		let reduced = prefersReduced.matches
 		const onPref = () => { reduced = prefersReduced.matches }
+		const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches
 		prefersReduced.addEventListener?.('change', onPref)
 
-		const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, canvas })
-		renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1))
+		const renderer = new THREE.WebGLRenderer({ antialias: !isCoarsePointer && !reduced, alpha: true, canvas })
+		renderer.setPixelRatio(Math.min(isCoarsePointer ? 1.25 : 2, window.devicePixelRatio || 1))
 		renderer.setClearColor(0x000000, 0)
 
 		const scene = new THREE.Scene()
@@ -45,7 +46,9 @@ export default function FlowFieldParticles({ fullscreen = false, flowPercent = 2
 		let HEIGHT = (fullscreen ? window.innerHeight : (canvas.clientHeight || 360))
 		const BASE = 1280 * 720
 		const norm = Math.max(0.6, Math.min(2.5, (WIDTH * HEIGHT) / BASE))
-		const COUNT = Math.floor(2800 * Math.sqrt(norm))
+		const motionFactor = reduced ? 0.45 : 1
+		const coarseFactor = isCoarsePointer ? 0.75 : 1
+		const COUNT = Math.floor(2800 * Math.sqrt(norm) * motionFactor * coarseFactor)
 		const RADIUS = radius
 		const FREQ = 0.35
 		const clampedFlowPercent = Math.max(0, Math.min(100, flowPercent))
@@ -71,7 +74,9 @@ export default function FlowFieldParticles({ fullscreen = false, flowPercent = 2
 			speed[i] = 0.6 + Math.random()*0.8
 		}
 		const geometry = new THREE.BufferGeometry()
-		geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+		const positionAttr = new THREE.BufferAttribute(positions, 3)
+		positionAttr.setUsage(THREE.DynamicDrawUsage)
+		geometry.setAttribute('position', positionAttr)
 
 		const material = new THREE.PointsMaterial({
 			color: new THREE.Color(getParticleColor()),
@@ -96,7 +101,6 @@ export default function FlowFieldParticles({ fullscreen = false, flowPercent = 2
 			h = (h ^ (h >> 13)) >>> 0
 			return (h & 0xffffff) / 0xffffff
 		}
-		function smoothstep(a,b,t){ t = Math.max(0, Math.min(1,(t-a)/(b-a))); return t*t*(3-2*t) }
 		function noise3(x, y, z){
 			const xi = Math.floor(x), yi = Math.floor(y), zi = Math.floor(z)
 			const xf = x - xi, yf = y - yi, zf = z - zi
@@ -111,7 +115,7 @@ export default function FlowFieldParticles({ fullscreen = false, flowPercent = 2
 			}
 			return n
 		}
-		function flow(x, y, z, t){
+		function flow(x, y, z, t, out){
 			// Use three offset noises to form a direction
 			const nx = noise3(x*FREQ + 13+t, y*FREQ, z*FREQ) - 0.5
 			const ny = noise3(x*FREQ, y*FREQ + 37+t*0.8, z*FREQ) - 0.5
@@ -121,13 +125,15 @@ export default function FlowFieldParticles({ fullscreen = false, flowPercent = 2
 			const vy = ny*0.8 + (0.02)
 			const vz = nz*1.3 + x*0.06
 			const len = Math.hypot(vx,vy,vz) || 1
-			return [vx/len, vy/len, vz/len]
+			out[0] = vx/len
+			out[1] = vy/len
+			out[2] = vz/len
 		}
 
 		function fit(){
 			WIDTH = fullscreen ? window.innerWidth : (canvas.clientWidth || 560)
 			HEIGHT = fullscreen ? window.innerHeight : (canvas.clientHeight || 360)
-			const dpr = Math.min(2, window.devicePixelRatio || 1)
+			const dpr = Math.min(isCoarsePointer ? 1.25 : 2, window.devicePixelRatio || 1)
 			renderer.setPixelRatio(dpr)
 			renderer.setSize(WIDTH, HEIGHT, false)
 			camera.aspect = WIDTH/HEIGHT
@@ -137,40 +143,47 @@ export default function FlowFieldParticles({ fullscreen = false, flowPercent = 2
 
 		let last = performance.now()
 		let running = true
+		let skipFrame = false
+		const dir = new Float32Array(3) // reused direction vector to avoid per-frame allocations
 		const loop = () => {
 			if (!running) return
+			if (reduced){
+				skipFrame = !skipFrame
+				if (skipFrame){
+					rafRef.current = requestAnimationFrame(loop)
+					return
+				}
+			}
 			const now = performance.now()
 			const dt = Math.min(0.05, (now - last)/1000)
 			last = now
 
-			if (!reduced){
-				const t = now / 1000
-				for (let i=0;i<COUNT;i++){
-					const ix = i*3
-					let x = positions[ix], y = positions[ix+1], z = positions[ix+2]
-					const dir = flow(x, y, z, t)
-					// velocity = lerp(velocity, dir * speed, LERP)
-					velocities[ix]   += (dir[0]*speed[i] - velocities[ix]) * LERP
-					velocities[ix+1] += (dir[1]*speed[i] - velocities[ix+1]) * LERP
-					velocities[ix+2] += (dir[2]*speed[i] - velocities[ix+2]) * LERP
-					x += velocities[ix] * FLOW * dt
-					y += velocities[ix+1] * FLOW * dt
-					z += velocities[ix+2] * FLOW * dt
-					// keep in bounds with soft wrap
-					const r = Math.hypot(x, z)
-					if (r > RADIUS){
-						const ang = Math.atan2(z, x) + Math.PI
-						const rr = RADIUS * 0.98
-						x = Math.cos(ang) * rr
-						z = Math.sin(ang) * rr
-					}
-					if (y > RADIUS*0.7) y = -RADIUS*0.7
-					if (y < -RADIUS*0.7) y = RADIUS*0.7
-					positions[ix] = x; positions[ix+1] = y; positions[ix+2] = z
+			const t = now / 1000
+			for (let i=0;i<COUNT;i++){
+				const ix = i*3
+				let x = positions[ix], y = positions[ix+1], z = positions[ix+2]
+				flow(x, y, z, t, dir)
+				// velocity = lerp(velocity, dir * speed, LERP)
+				velocities[ix]   += (dir[0]*speed[i] - velocities[ix]) * LERP
+				velocities[ix+1] += (dir[1]*speed[i] - velocities[ix+1]) * LERP
+				velocities[ix+2] += (dir[2]*speed[i] - velocities[ix+2]) * LERP
+				x += velocities[ix] * FLOW * dt
+				y += velocities[ix+1] * FLOW * dt
+				z += velocities[ix+2] * FLOW * dt
+				// keep in bounds with soft wrap
+				const r = Math.hypot(x, z)
+				if (r > RADIUS){
+					const ang = Math.atan2(z, x) + Math.PI
+					const rr = RADIUS * 0.98
+					x = Math.cos(ang) * rr
+					z = Math.sin(ang) * rr
 				}
-				geometry.attributes.position.needsUpdate = true
-				group.rotation.y += dt * 0.12
+				if (y > RADIUS*0.7) y = -RADIUS*0.7
+				if (y < -RADIUS*0.7) y = RADIUS*0.7
+				positions[ix] = x; positions[ix+1] = y; positions[ix+2] = z
 			}
+			geometry.attributes.position.needsUpdate = true
+			group.rotation.y += dt * 0.12
 
 			renderer.render(scene, camera)
 			rafRef.current = requestAnimationFrame(loop)
@@ -183,7 +196,7 @@ export default function FlowFieldParticles({ fullscreen = false, flowPercent = 2
 			if (document.visibilityState === 'hidden') running = false
 			else { running = true; rafRef.current = requestAnimationFrame(loop) }
 		}
-			document.addEventListener('visibilitychange', onVis)
+		document.addEventListener('visibilitychange', onVis)
 
 		return () => {
 			running = false

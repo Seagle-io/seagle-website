@@ -10,8 +10,8 @@
   color-scheme: "light";
 	/* CUSTOM */
 	--particle-color: "#22D1DC";
-  --opacity-particle: 1;
-  --blur-particle: 1px;
+  --opacity-particle: 0.3;
+  --blur-particle: 3px;
   --seagle-color: "#00E5FF";
   --default-font-family: "Sora";
   --color-light-sea: "#000";
