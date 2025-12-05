@@ -10,7 +10,7 @@ type FlowFieldParticlesProps = {
 	size?: number
 }
 
-export default function FlowFieldParticles({ fullscreen = false, flowPercent = 33.3, radius = 5, size = 0.04 }: FlowFieldParticlesProps){
+export default function FlowFieldParticles({ fullscreen = false, flowPercent = 33.3, radius = 5, size = 0.02 }: FlowFieldParticlesProps){
 	const wrapRef = useRef(null)
 	const canvasRef = useRef(null)
 	const rafRef = useRef(0)

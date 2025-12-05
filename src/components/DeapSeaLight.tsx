@@ -1,46 +1,83 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties } from "react"
 
 const styles = `
 @keyframes smoothBg {
   from {
-    background-position: 50% 50%, 50% 50%;
+    background-position: -60% 50%, -60% 50%;
   }
   to {
-    background-position: 350% 50%, 350% 50%;
+    background-position: 160% 50%, 160% 50%;
   }
 }
 
 .dsl {
-  position: absolute;
-  width: 100%;
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, black 0%, black 25%, transparent 85%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 25%, transparent 85%);
 }
 
 .dsl-hero {
-  min-height: 60vh;
-  --stripes: repeating-linear-gradient(
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  --stripes: linear-gradient(
     40deg,
-    var(--stripe-color) 0%,
-    var(--stripe-color) 1%,
-    transparent 10%,
-    transparent 12%,
-    var(--stripe-color) 16%
+    transparent 0%,
+    transparent 22%,
+    var(--stripe-color) 32%,
+    var(--stripe-color) 42%,
+    transparent 52%,
+    transparent 60%,
+    var(--stripe-color) 70%,
+    var(--stripe-color) 80%,
+    transparent 90%,
+    transparent 100%
   );
 
-  --rainbow: repeating-linear-gradient(
+  --rainbow: linear-gradient(
     40deg,
-    #FFFFFF 10%,
-    #d9d9d9 15%,
-    #afafaf 20%,
-    #6f6f6f 25%,
-    #313131 30%
+    transparent 0%,
+    transparent 22%,
+    #cfcfcf 32%,
+    #a8a8a8 42%,
+    transparent 52%,
+    transparent 60%,
+    #777777 70%,
+    #3a3a3a 80%,
+    transparent 90%,
+    transparent 100%
   );
   background-image: var(--stripes), var(--rainbow);
-  background-size: 300%, 200%;
+  background-size: 360%, 220%;
   background-position: 50% 50%, 50% 50%;
+  background-repeat: no-repeat, no-repeat;
 
-  filter: blur(10px) invert(100%);
-  mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%);
+  filter: blur(8px) invert(100%) brightness(0.85) saturate(105%);
+  mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+}
+
+.dsl-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.34) 0%,
+    rgba(0, 0, 0, 0.14) 14%,
+    transparent 30%,
+    transparent 70%,
+    rgba(0, 0, 0, 0.14) 86%,
+    rgba(0, 0, 0, 0.34) 100%
+  );
+  pointer-events: none;
+  z-index: 2;
 }
 
 .dsl-hero::after {
@@ -49,26 +86,30 @@ const styles = `
   inset: 0;
   background-image: var(--stripes), var(--rainbow);
   background-size: 200%, 100%;
-  animation: smoothBg 60s linear infinite;
+  background-repeat: no-repeat, no-repeat;
+  animation: smoothBg 35s linear infinite;
   background-attachment: fixed;
   mix-blend-mode: difference;
+  mask-image: linear-gradient(to bottom, black 0%, black 35%, transparent 70%);
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 35%, transparent 70%);
+  z-index: 1;
 }
 
 .dsl-dark .dsl-hero,
 .dsl-dark .dsl-hero::after {
-  filter: blur(10px) opacity(50%) saturate(200%);
+  filter: blur(8px) opacity(80%) saturate(180%);
 }
 `;
 
 export function DeapSeaLight() {
   const variableStyle = {
-    "--stripe-color": "#000",
+    "--stripe-color": "var(--color-light-sea)",
   } as CSSProperties;
 
   return (
     <section className="dsl dsl-dark" style={variableStyle}>
       <style>{styles}</style>
-      <div className="w-2xl dsl-hero" aria-hidden />
+      <div className="w-full dsl-hero" aria-hidden />
     </section>
   );
 }
