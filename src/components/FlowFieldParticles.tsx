@@ -7,29 +7,22 @@ type FlowFieldParticlesProps = {
 	particlesColor?: string
 	flowPercent?: number
 	radius?: number
+	size?: number
 }
 
-export default function FlowFieldParticles({ fullscreen = false, particlesColor, flowPercent = 33.3, radius = 5 }: FlowFieldParticlesProps){
+export default function FlowFieldParticles({ fullscreen = false, flowPercent = 33.3, radius = 5, size = 0.04 }: FlowFieldParticlesProps){
 	const wrapRef = useRef(null)
 	const canvasRef = useRef(null)
 	const rafRef = useRef(0)
 
 	useEffect(() => {
+		const getParticleColor = () => {
+			const cssValue = getComputedStyle(document.documentElement).getPropertyValue('--particle-color').trim()
+			return cssValue || '#ffffff'
+		}
+
 		const canvas = canvasRef.current
 		if (!canvas) return
-
-		const defaultParticleColor = '#22D1DC'
-		const resolveParticleColor = () => {
-			const root = document.documentElement
-			const cssValue = getComputedStyle(root).getPropertyValue('--particle-color').trim()
-			const candidate = particlesColor || cssValue || defaultParticleColor
-			try {
-				new THREE.Color(candidate)
-				return candidate
-			} catch {
-				return defaultParticleColor
-			}
-		}
 
 		const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)')
 		let reduced = prefersReduced.matches
@@ -81,8 +74,8 @@ export default function FlowFieldParticles({ fullscreen = false, particlesColor,
 		geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3))
 
 		const material = new THREE.PointsMaterial({
-			color: new THREE.Color(resolveParticleColor()),
-			size: 0.06,
+			color: new THREE.Color(getParticleColor()),
+			size,
 			sizeAttenuation: true,
 			transparent: true,
 			opacity: 0.58, // softer base; CSS adds additional blur+opacity
@@ -90,7 +83,7 @@ export default function FlowFieldParticles({ fullscreen = false, particlesColor,
 			depthWrite: false,
 		})
 		const themeObserver = new MutationObserver(() => {
-			material.color.set(resolveParticleColor())
+			material.color.set(getParticleColor())
 		})
 		themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
 

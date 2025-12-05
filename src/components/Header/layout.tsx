@@ -6,9 +6,9 @@ type LayoutProps = {
 }
 
 const Layout = ({ children }: LayoutProps) => (
-	<div className="min-h-screen">
+	<div className="bg-base-200 min-h-screen">
 		<Header />
-		<main className="relative z-10">
+		<main className="flex justify-center relative z-10">
 			{children}
 		</main>
 	</div>
